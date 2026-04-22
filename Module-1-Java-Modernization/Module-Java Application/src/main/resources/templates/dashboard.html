@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Ticketing System - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #C0C0C0;
+            margin: 0;
+            padding: 10px;
+        }
+        .header {
+            background-color: #000080;
+            color: white;
+            padding: 10px;
+            border: 2px solid #000000;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .header p {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #FFFFFF;
+            border: 2px solid #000000;
+            margin-bottom: 10px;
+        }
+        th {
+            background-color: #808080;
+            color: white;
+            padding: 5px;
+            text-align: left;
+            border: 1px solid #000000;
+            font-size: 12px;
+        }
+        td {
+            padding: 5px;
+            border: 1px solid #000000;
+            font-size: 11px;
+        }
+        .stats-table {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .stats-table td {
+            background-color: #E0E0E0;
+            font-weight: bold;
+            padding: 8px;
+        }
+        .stat-value {
+            background-color: #FFFF00 !important;
+            text-align: center;
+            font-size: 16px;
+        }
+        .status-open {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+        .status-in-progress {
+            background-color: #FFA500;
+            color: white;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+        .status-resolved {
+            background-color: #4CAF50;
+            color: white;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+        .status-closed {
+            background-color: #808080;
+            color: white;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+        .priority-high {
+            color: #FF0000;
+            font-weight: bold;
+        }
+        .priority-medium {
+            color: #FFA500;
+            font-weight: bold;
+        }
+        .priority-low {
+            color: #008000;
+        }
+        .section-title {
+            background-color: #000080;
+            color: white;
+            padding: 5px;
+            border: 2px solid #000000;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #808080;
+            color: white;
+            padding: 5px;
+            text-align: center;
+            border: 2px solid #000000;
+            margin-top: 10px;
+            font-size: 10px;
+        }
+        a {
+            color: #0000FF;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #800080;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏦 Bank - Customer Service Ticketing System</h1>
+        <p>Dashboard Overview - Real-time Ticket Management</p>
+    </div>
+
+    <div class="section-title">SYSTEM STATISTICS</div>
+    <table class="stats-table">
+        <tr>
+            <td>Total Open Tickets:</td>
+            <td class="stat-value" th:text="${openCount}">0</td>
+            <td>In Progress:</td>
+            <td class="stat-value" th:text="${inProgressCount}">0</td>
+        </tr>
+        <tr>
+            <td>Resolved Tickets:</td>
+            <td class="stat-value" th:text="${resolvedCount}">0</td>
+            <td>Closed Tickets:</td>
+            <td class="stat-value" th:text="${closedCount}">0</td>
+        </tr>
+        <tr>
+            <td>Total Customers:</td>
+            <td class="stat-value" th:text="${totalCustomers}">0</td>
+            <td>Active Customers:</td>
+            <td class="stat-value" th:text="${activeCustomers}">0</td>
+        </tr>
+    </table>
+
+    <div class="section-title">ACTIVE TICKETS (OPEN / IN PROGRESS)</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Ticket #</th>
+                <th>Customer</th>
+                <th>Subject</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket : ${activeTickets}">
+                <td th:text="${ticket.ticketNumber}">TKT-001</td>
+                <td th:text="${ticket.customer != null ? ticket.customer.name : 'N/A'}">Customer Name</td>
+                <td th:text="${ticket.subject}">Subject</td>
+                <td th:text="${ticket.category}">Category</td>
+                <td>
+                    <span th:class="${ticket.priority == 'HIGH' ? 'priority-high' : (ticket.priority == 'MEDIUM' ? 'priority-medium' : 'priority-low')}"
+                          th:text="${ticket.priority}">Priority</span>
+                </td>
+                <td>
+                    <span th:class="${ticket.status == 'OPEN' ? 'status-open' : 'status-in-progress'}"
+                          th:text="${ticket.status}">Status</span>
+                </td>
+                <td th:text="${ticket.assignedTo}">Agent</td>
+                <td th:text="${#temporals.format(ticket.createdDate, 'yyyy-MM-dd HH:mm')}">Date</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">CUSTOMER DATABASE</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Account Type</th>
+                <th>Status</th>
+                <th>Registration Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.customerId}">CUST-001</td>
+                <td th:text="${customer.name}">Name</td>
+                <td th:text="${customer.email}">email@example.com</td>
+                <td th:text="${customer.phoneNumber}">Phone</td>
+                <td th:text="${customer.accountType}">Type</td>
+                <td th:text="${customer.active ? 'ACTIVE' : 'INACTIVE'}">Status</td>
+                <td th:text="${#temporals.format(customer.registrationDate, 'yyyy-MM-dd')}">Date</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        &copy; 2008 Bank - Customer Service System v1.0 | Java 8 | Spring Boot 2.7.18 | Legacy System
+    </div>
+</body>
+</html>

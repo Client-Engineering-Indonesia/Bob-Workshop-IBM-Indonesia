@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank - Application Modernization Workshop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background: #2c2c2e;
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .search-box {
+            background: #3a3a3c;
+            border: 1px solid #48484a;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: white;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .search-box::placeholder {
+            color: #8e8e93;
+        }
+
+        .top-nav-right {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 20px;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #3a3a3c;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            bottom: 0;
+            width: 240px;
+            background: white;
+            border-right: 1px solid #e5e5e7;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #86868b;
+            padding: 0 24px;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-item {
+            padding: 10px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1d1d1f;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: #f5f5f7;
+        }
+
+        .sidebar-item.active {
+            background: #f0f0f5;
+            border-left-color: #5e5ce6;
+            color: #5e5ce6;
+            font-weight: 600;
+        }
+
+        .sidebar-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .badge-new {
+            background: #34c759;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            margin-top: 56px;
+            padding: 40px;
+            min-height: calc(100vh - 56px);
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #86868b;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .btn-primary {
+            background: #5e5ce6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #4c4ad4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(94, 92, 230, 0.3);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 1px solid #e5e5e7;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .card-icon.java {
+            background: linear-gradient(135deg, #f89820 0%, #d35400 100%);
+        }
+
+        .card-icon.cobol {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+
+        .card-icon.tools {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        }
+
+        .card-icon.roadmap {
+            background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #86868b;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        .card-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #f5f5f7;
+        }
+
+        .card-link {
+            color: #5e5ce6;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .tag.demo {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .tag.workshop {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .tag.interactive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin: 48px 0 24px 0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #86868b;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e5e7;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #5e5ce6;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: #f5f5f7;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5e5ce6 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e5e5e7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #86868b;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            background: #f5f5f7;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .code-comparison-modal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .code-block-header {
+            color: #61dafb;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .code-comparison-modal {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="top-nav-left">
+            <div class="logo">
+                <div class="logo-icon">🏦</div>
+                <span>BANK</span>
+            </div>
+            <input type="text" class="search-box" placeholder="Search workshops, demos, tools...">
+        </div>
+        <div class="top-nav-right">
+            <button class="icon-btn" title="Notifications">🔔</button>
+            <button class="icon-btn" title="Help">❓</button>
+            <button class="icon-btn" title="Menu">☰</button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-item active" onclick="showPage('home')">
+                <span class="sidebar-icon">🏠</span>
+                <span>Home</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('workshops')">
+                <span class="sidebar-icon">📚</span>
+                <span>Workshops</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('demos')">
+                <span class="sidebar-icon">🎯</span>
+                <span>Live Demos</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('tools')">
+                <span class="sidebar-icon">🛠️</span>
+                <span>IBM Tools</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('roadmap')">
+                <span class="sidebar-icon">🗺️</span>
+                <span>Roadmap</span>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">Resources</div>
+            <div class="sidebar-item">
+                <span class="sidebar-icon">📖</span>
+                <span>Documentation</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="sidebar-icon">💬</span>
+                <span>Support</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="sidebar-icon">📊</span>
+                <span>Analytics</span>
+                <span class="badge-new">New</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page-content">
+            <div class="page-header">
+                <h1 class="page-title">Application Modernization Workshop</h1>
+                <p class="page-subtitle">Transform your legacy Java and COBOL applications to modern, cloud-native architectures</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Cost Reduction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">60%</div>
+                    <div class="stat-label">Faster Delivery</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Security Improved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2x</div>
+                    <div class="stat-label">Productivity</div>
+                </div>
+            </div>
+            <!-- Workshop Story Section -->
+            <div class="section-header" style="margin-top: 48px;">
+                <h2 class="section-title">🎭 The Bank in Indonesia Story</h2>
+                <p class="section-subtitle">Meet the team transforming legacy systems with Project Bob</p>
+            </div>
+
+            <!-- Character Cards -->
+            <div class="card-grid">
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(255,255,255,0.2); font-size: 32px;">👨‍💻</div>
+                        <div class="card-content">
+                            <h3 class="card-title" style="color: white;">Budi - Senior Java Developer</h3>
+                            <div>
+                                <span class="tag" style="background: rgba(255,255,255,0.2); color: white;">15 years experience</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description" style="color: rgba(255,255,255,0.9);">
+                        <strong>The Challenge:</strong> Maintains Bank's customer service ticketing system built on Java 8.
+                        Worried about security vulnerabilities, technical debt, and 50,000+ lines of legacy code.
+                    </p>
+                    <p class="card-description" style="color: rgba(255,255,255,0.9); margin-top: 12px;">
+                        <strong>The Question:</strong> "I know there are problems, but I don't have time to review 50,000 lines of code. Where do I even start?"
+                    </p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(255,255,255,0.2); font-size: 32px;">👩‍💻</div>
+                        <div class="card-content">
+                            <h3 class="card-title" style="color: white;">Siti - Mainframe Developer</h3>
+                            <div>
+                                <span class="tag" style="background: rgba(255,255,255,0.2); color: white;">20 years experience</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description" style="color: rgba(255,255,255,0.9);">
+                        <strong>The Challenge:</strong> Manages COBOL banking systems from the 1980s handling millions of daily transactions. 
+                        Concerned about knowledge transfer as COBOL developers retire.
+                    </p>
+                    <p class="card-description" style="color: rgba(255,255,255,0.9); margin-top: 12px;">
+                        <strong>The Question:</strong> "I'm the only one who understands this system. What happens when I retire? We can't rewrite it from scratch - too risky!"
+                    </p>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(255,255,255,0.2); font-size: 32px;">👔</div>
+                        <div class="card-content">
+                            <h3 class="card-title" style="color: white;">Rudi - IT Manager</h3>
+                            <div>
+                                <span class="tag" style="background: rgba(255,255,255,0.2); color: white;">Modernization Lead</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description" style="color: rgba(255,255,255,0.9);">
+                        <strong>The Challenge:</strong> Responsible for modernization strategy. 
+                        Needs to balance innovation with business continuity for 24/7 banking operations.
+                    </p>
+                    <p class="card-description" style="color: rgba(255,255,255,0.9); margin-top: 12px;">
+                        <strong>The Question:</strong> "How do we modernize safely without disrupting our critical banking operations?"
+                    </p>
+                </div>
+            </div>
+
+            <!-- The Solution -->
+            <div class="section-header" style="margin-top: 48px;">
+                <h2 class="section-title">💡 The Solution: Project Bob</h2>
+                <p class="section-subtitle">AI-powered code assistant that understands legacy systems</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 32px;">
+                <h3 style="font-size: 24px; margin-bottom: 16px; color: white;">What Project Bob Does</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 24px;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
+                        <h4 style="color: white; margin-bottom: 8px;">Analyzes Legacy Code</h4>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px;">Understands Java, COBOL, RPG and identifies technical debt in seconds</p>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 8px;">🛠️</div>
+                        <h4 style="color: white; margin-bottom: 8px;">Suggests Improvements</h4>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px;">Recommends modern patterns, security fixes, and best practices</p>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 8px;">📚</div>
+                        <h4 style="color: white; margin-bottom: 8px;">Generates Documentation</h4>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px;">Creates diagrams, flowcharts, and technical documentation automatically</p>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 8px;">⚡</div>
+                        <h4 style="color: white; margin-bottom: 8px;">Accelerates Development</h4>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 14px;">Helps developers work 2x faster while preserving business logic</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Journey -->
+            <div class="section-header" style="margin-top: 48px;">
+                <h2 class="section-title">🚀 The Transformation Journey</h2>
+                <p class="section-subtitle">Follow Budi and Siti as they modernize Bank's systems</p>
+            </div>
+
+            <div class="card-grid">
+                <!-- Budi's Journey -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon java">☕</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Budi's Java Modernization</h3>
+                            <div>
+                                <span class="tag demo">15-20 min</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px; background: #f5f5f7; border-radius: 8px; margin: 16px 0;">
+                        <p style="font-weight: 600; margin-bottom: 12px;">The 5-Step Journey:</p>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #667eea; font-weight: 600;">1.</span>
+                                <span><strong>Discovery:</strong> Bob identifies Java 8, Spring Boot 2.7, and security issues</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #667eea; font-weight: 600;">2.</span>
+                                <span><strong>Analysis:</strong> Bob finds 500+ lines of boilerplate, no validation, weak error handling</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #667eea; font-weight: 600;">3.</span>
+                                <span><strong>Modernization:</strong> Bob applies Lombok, reduces 80 lines to 8 lines</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #667eea; font-weight: 600;">4.</span>
+                                <span><strong>Security:</strong> Bob adds input validation and sanitization</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #667eea; font-weight: 600;">5.</span>
+                                <span><strong>Documentation:</strong> Bob generates architecture diagrams</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: #e8f5e9; padding: 16px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <p style="font-weight: 600; color: #2e7d32; margin-bottom: 8px;">✅ Results:</p>
+                        <ul style="margin-left: 20px; color: #2e7d32;">
+                            <li>60% code reduction</li>
+                            <li>Security vulnerabilities fixed</li>
+                            <li>Modern patterns applied</li>
+                            <li><strong>40 hours saved</strong></li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="openModal('java-demo')">
+                            See Budi's journey →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Siti's Journey -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon cobol">💾</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Siti's COBOL Modernization</h3>
+                            <div>
+                                <span class="tag demo">15-20 min</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px; background: #f5f5f7; border-radius: 8px; margin: 16px 0;">
+                        <p style="font-weight: 600; margin-bottom: 12px;">The 5-Step Journey:</p>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #f5576c; font-weight: 600;">1.</span>
+                                <span><strong>Understanding:</strong> Bob explains 40-year-old COBOL program logic</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #f5576c; font-weight: 600;">2.</span>
+                                <span><strong>Structure:</strong> Bob maps IDENTIFICATION, ENVIRONMENT, DATA, PROCEDURE divisions</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #f5576c; font-weight: 600;">3.</span>
+                                <span><strong>Issues:</strong> Bob identifies sequential files, no error handling, hard-coded values</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #f5576c; font-weight: 600;">4.</span>
+                                <span><strong>Documentation:</strong> Bob creates transaction flow diagrams</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: #f5576c; font-weight: 600;">5.</span>
+                                <span><strong>Roadmap:</strong> Bob proposes phased modernization strategy</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: #e8f5e9; padding: 16px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <p style="font-weight: 600; color: #2e7d32; margin-bottom: 8px;">✅ Results:</p>
+                        <ul style="margin-left: 20px; color: #2e7d32;">
+                            <li>Complete documentation generated</li>
+                            <li>Knowledge preserved</li>
+                            <li>Modernization roadmap created</li>
+                            <li><strong>80 hours saved</strong></li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="openModal('cobol-demo')">
+                            See Siti's journey →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Impact -->
+            <div class="section-header" style="margin-top: 48px;">
+                <h2 class="section-title">📊 The Business Impact</h2>
+                <p class="section-subtitle">Real results from Bank in Indonesia's modernization</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 32px;">
+                <h3 style="font-size: 24px; margin-bottom: 24px; color: white;">6 Months Later at Bank in Indonesia</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 8px;">120hrs</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Work Done in 40 Minutes</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 8px;">2x</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Developer Productivity</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 8px;">60%</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Faster Modernization</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 8px;">100%</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Business Logic Preserved</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <h4 style="color: white; margin-bottom: 16px;">Team Testimonials:</h4>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                            <p style="font-style: italic; margin-bottom: 8px;">"I've modernized 5 more Java applications using Bob. Each one takes days instead of months. I'm no longer afraid of legacy code!"</p>
+                            <p style="font-weight: 600;">— Budi, Senior Java Developer</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                            <p style="font-style: italic; margin-bottom: 8px;">"We've documented all our COBOL systems. New developers can now contribute. I can finally plan my retirement knowing the knowledge is preserved!"</p>
+                            <p style="font-weight: 600;">— Siti, Mainframe Developer</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                            <p style="font-style: italic; margin-bottom: 8px;">"Our modernization program is ahead of schedule. Security audits are passing. Compliance is happy. And our developers love working with Bob!"</p>
+                            <p style="font-weight: 600;">— Rudi, IT Manager</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Featured Demos -->
+            <div class="section-header">
+                <h2 class="section-title">Featured Demos</h2>
+                <p class="section-subtitle">Interactive demonstrations of modernization techniques</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="card" onclick="openModal('java-demo')">
+                    <div class="card-header">
+                        <div class="card-icon java">☕</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Java Modernization Demo</h3>
+                            <div>
+                                <span class="tag demo">Demo</span>
+                                <span class="tag interactive">Interactive</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        See how legacy Java 6/7 applications transform to modern Java 17 + Spring Boot 3. 
+                        Eliminate security vulnerabilities, improve performance, and reduce technical debt.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-meta-item">
+                            <span>⏱️</span>
+                            <span>15 minutes</span>
+                        </div>
+                        <div class="card-meta-item">
+                            <span>📊</span>
+                            <span>85% improvement</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="event.stopPropagation(); openModal('java-demo')">
+                            Launch demo →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card" onclick="openModal('cobol-demo')">
+                    <div class="card-header">
+                        <div class="card-icon cobol">💾</div>
+                        <div class="card-content">
+                            <h3 class="card-title">COBOL Modernization Demo</h3>
+                            <div>
+                                <span class="tag demo">Demo</span>
+                                <span class="tag interactive">Interactive</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Transform legacy COBOL with GOTO statements to structured, maintainable code. 
+                        Implement transaction safety, error handling, and comprehensive audit trails.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-meta-item">
+                            <span>⏱️</span>
+                            <span>15 minutes</span>
+                        </div>
+                        <div class="card-meta-item">
+                            <span>📊</span>
+                            <span>240% better</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="event.stopPropagation(); openModal('cobol-demo')">
+                            Launch demo →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card" onclick="openModal('comparison')">
+                    <div class="card-icon tools">📊</div>
+                    <div class="card-content">
+                        <h3 class="card-title">Side-by-Side Comparison</h3>
+                        <div>
+                            <span class="tag workshop">Workshop</span>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Compare legacy vs modern implementations across Java and COBOL. 
+                        See real metrics, ROI calculations, and business impact analysis.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-meta-item">
+                            <span>⏱️</span>
+                            <span>10 minutes</span>
+                        </div>
+                        <div class="card-meta-item">
+                            <span>💰</span>
+                            <span>18-24mo ROI</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="event.stopPropagation(); openModal('comparison')">
+                            View comparison →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended -->
+            <div class="section-header">
+                <h2 class="section-title">Recommended</h2>
+                <p class="section-subtitle">Curated content for your modernization journey</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon roadmap">🗺️</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Modernization Roadmap</h3>
+                            <div>
+                                <span class="tag workshop">Workshop</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Step-by-step guide for Java and COBOL modernization. 
+                        Includes timelines, phases, quick wins, and success metrics for Bank Indonesia.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-meta-item">
+                            <span>📅</span>
+                            <span>12-24 months</span>
+                        </div>
+                        <div class="card-meta-item">
+                            <span>✅</span>
+                            <span>3 phases</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="openModal('roadmap')">
+                            View roadmap →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon tools">🛠️</div>
+                    <div class="card-content">
+                        <h3 class="card-title">IBM Tools & Solutions</h3>
+                        <div>
+                            <span class="tag workshop">Workshop</span>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Explore IBM's comprehensive tooling ecosystem: ADDI, Transformation Advisor,
+                        Semeru Runtime, z/OS Connect, and Project Bob.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-meta-item">
+                            <span>🔧</span>
+                            <span>5+ tools</span>
+                        </div>
+                        <div class="card-meta-item">
+                            <span>💡</span>
+                            <span>AI-powered</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link" onclick="openModal('tools')">
+                            Explore tools →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">📚</div>
+                    <div class="card-content">
+                        <h3 class="card-title">Workshop Materials</h3>
+                        <div>
+                            <span class="tag workshop">Workshop</span>
+                        </div>
+                        </div>
+                    <p class="card-description">
+                        Access complete workshop materials including presentation slides, 
+                        demo guides, code examples, and facilitator notes for 1-hour or 2-day sessions.
+                    </p>
+                    <div class="card-meta">
+                        <div class="card-meta-item">
+                            <span>📄</span>
+                            <span>Complete package</span>
+                        </div>
+                        <div class="card-meta-item">
+                            <span>⏱️</span>
+                            <span>1hr or 2-day</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">
+                            Download materials →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="java-modal" class="modal-overlay" onclick="closeModal('java-modal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">☕ Java Modernization Demo</h2>
+                <button class="modal-close" onclick="closeModal('java-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <h3 style="margin-bottom: 16px;">Legacy vs Modern Code Comparison</h3>
+                <div class="code-comparison-modal">
+                    <div>
+                        <div class="code-block">
+                            <div class="code-block-header">❌ Legacy Java 6/7</div>
+                            <pre>// SECURITY RISK: Hardcoded credentials
+private static final String DB_PASSWORD = "P@ssw0rd123";
+
+// SQL INJECTION VULNERABILITY
+public double getAccountBalance(String accountNumber) {
+    Statement stmt = connection.createStatement();
+    
+    // Concatenating user input - DANGEROUS!
+    String query = "SELECT balance FROM accounts " +
+                   "WHERE account_number = '" + accountNumber + "'";
+    
+    ResultSet rs = stmt.executeQuery(query);
+    
+    if (rs.next()) {
+        return rs.getDouble("balance");
+    }
+    
+    // Poor error handling
+    catch (SQLException e) {
+        e.printStackTrace(); // Exposes internal details!
+    }
+}</pre>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-block">
+                            <div class="code-block-header">✅ Modern Java 17 + Spring Boot 3</div>
+                            <pre>@Service
+@Slf4j
+@RequiredArgsConstructor
+public class BankingService {
+    
+    private final AccountRepository accountRepository;
+    
+    // Credentials in environment variables
+    // Parameterized queries prevent SQL injection
+    public BigDecimal getAccountBalance(@NotNull String accountNumber) {
+        log.info("Retrieving balance for account: {}", accountNumber);
+        
+        return accountRepository.findByAccountNumber(accountNumber)
+                .map(Account::getBalance)
+                .orElseThrow(() -> 
+                    new AccountNotFoundException(accountNumber));
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 24px; padding: 20px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4 style="margin-bottom: 12px; color: #155724;">✅ Key Improvements</h4>
+                    <ul style="margin-left: 20px; color: #155724; line-height: 1.8;">
+                        <li>Java 17 LTS with latest security patches</li>
+                        <li>Spring Boot 3 with dependency injection</li>
+                        <li>Parameterized queries prevent SQL injection</li>
+                        <li>Proper logging with SLF4J</li>
+                        <li>BigDecimal for precise financial calculations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cobol-modal" class="modal-overlay" onclick="closeModal('cobol-modal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">💾 COBOL Modernization Demo</h2>
+                <button class="modal-close" onclick="closeModal('cobol-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <h3 style="margin-bottom: 16px;">Legacy vs Modern Code Comparison</h3>
+                <div class="code-comparison-modal">
+                    <div>
+                        <div class="code-block">
+                            <div class="code-block-header">❌ Legacy - GOTO Spaghetti</div>
+                            <pre>MENU-LOOP.
+    ACCEPT WS-MENU-CHOICE.
+    
+    IF WS-MENU-CHOICE = 1
+        GO TO CREATE-ACCOUNT
+    ELSE IF WS-MENU-CHOICE = 2
+        GO TO VIEW-BALANCE
+    ELSE IF WS-MENU-CHOICE = 3
+        GO TO DEPOSIT-MONEY
+    ELSE IF WS-MENU-CHOICE = 4
+        GO TO WITHDRAW-MONEY
+    ELSE IF WS-MENU-CHOICE = 5
+        GO TO TRANSFER-MONEY
+    ELSE
+        GO TO MENU-LOOP.
+
+* Impossible to follow program flow
+* No structure or modularity
+* Money can be lost in transfers!</pre>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="code-block">
+                            <div class="code-block-header">✅ Modern - Structured Programming</div>
+                            <pre>0000-MAIN-PROGRAM.
+    PERFORM 1000-INITIALIZE-PROGRAM
+    PERFORM 2000-PROCESS-MENU UNTIL EXIT-PROCESSING
+    PERFORM 9000-TERMINATE-PROGRAM
+    STOP RUN.
+
+2000-PROCESS-MENU.
+    PERFORM 2100-DISPLAY-MENU
+    PERFORM 2200-GET-USER-CHOICE
+    
+    EVALUATE MENU-CHOICE
+        WHEN 1 PERFORM 3000-CREATE-ACCOUNT
+        WHEN 2 PERFORM 4000-VIEW-BALANCE
+        WHEN 3 PERFORM 5000-DEPOSIT-MONEY
+        WHEN 4 PERFORM 6000-WITHDRAW-MONEY
+        WHEN 5 PERFORM 7000-TRANSFER-MONEY
+        WHEN 9 SET EXIT-PROCESSING TO TRUE
+    END-EVALUATE.</pre>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 24px; padding: 20px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4 style="margin-bottom: 12px; color: #155724;">✅ Key Improvements</h4>
+                    <ul style="margin-left: 20px; color: #155724; line-height: 1.8;">
+                        <li>Structured programming - NO GOTO statements</li>
+                        <li>Transaction management with rollback capability</li>
+                        <li>Meaningful variable names</li>
+                        <li>Comprehensive error handling with codes</li>
+                        <li>Complete audit trail</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // In a real app, you would load different page content here
+            console.log('Navigating to:', pageId);
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId + '-modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
