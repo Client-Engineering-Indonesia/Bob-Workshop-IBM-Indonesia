@@ -1,39 +1,501 @@
-/* Trade Settlement Prediction Dashboard Styles */
+/* IBM Carbon Design System - Trade Settlement Prediction Dashboard */
+
+/* ============================================
+   DESIGN TOKENS & VARIABLES
+   ============================================ */
+:root {
+    /* IBM Colors */
+    --primary-blue: #0f62fe;
+    --primary-blue-hover: #0353e9;
+    --dark-background: #161616;
+    --light-background: #f4f4f4;
+    --white: #ffffff;
+    
+    /* Text Colors */
+    --text-primary: #161616;
+    --text-secondary: #525252;
+    --text-tertiary: #8d8d8d;
+    
+    /* Border Colors */
+    --border-subtle: #e0e0e0;
+    --border-strong: #0f62fe;
+    
+    /* Status Colors */
+    --success-bg: #defbe6;
+    --success-text: #0e6027;
+    --success-border: #24a148;
+    
+    --warning-bg: #fcf4d6;
+    --warning-text: #684e00;
+    --warning-border: #f1c21b;
+    
+    --error-bg: #ffd7d9;
+    --error-text: #750e13;
+    --error-border: #da1e28;
+    
+    --info-bg: #d0e2ff;
+    --info-text: #0043ce;
+    --info-border: #0f62fe;
+    
+    /* Interactive States */
+    --hover-background: #f4f4f4;
+    --active-border: #0f62fe;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Typography */
+    --font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 32px;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'IBM Plex Sans', Arial, sans-serif;
-    max-width: 1200px;
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    background-color: var(--light-background);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1584px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f4f4f4;
+    padding: var(--spacing-xl);
 }
 
-h1 {
-    color: #0f62fe;
-    border-bottom: 3px solid #0f62fe;
-    padding-bottom: 10px;
+/* ============================================
+   HEADER
+   ============================================ */
+.ibm-header {
+    background-color: var(--dark-background);
+    color: var(--white);
+    padding: var(--spacing-md) var(--spacing-xl);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+.ibm-header-logo {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+}
+
+.page-header {
+    border-left: 3px solid var(--primary-blue);
+    padding-left: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+.page-header h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.page-header .subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-subtle);
+    margin: var(--spacing-xl) 0;
+    overflow-x: auto;
+}
+
+.tab {
+    padding: var(--spacing-md) var(--spacing-lg);
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    color: var(--text-primary);
+    background-color: var(--hover-background);
+}
+
+.tab.active {
+    color: var(--primary-blue);
+    border-bottom-color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    padding: var(--spacing-xl) 0;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card {
+    background-color: var(--white);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-header {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+.card-body {
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   GRID SYSTEM
+   ============================================ */
+.grid {
+    display: grid;
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* ============================================
+   METRICS / STATS
+   ============================================ */
+.stat-card {
+    background-color: var(--white);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    line-height: 1;
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-label {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-help {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    margin-top: var(--spacing-xs);
+}
+
+/* ============================================
+   NOTIFICATION BOXES
+   ============================================ */
+.notification {
+    padding: var(--spacing-md);
+    border-radius: 4px;
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid;
+}
+
+.notification-success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border-left-color: var(--success-border);
+}
+
+.notification-warning {
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
+    border-left-color: var(--warning-border);
+}
+
+.notification-error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border-left-color: var(--error-border);
+}
+
+.notification-info {
+    background-color: var(--info-bg);
+    color: var(--info-text);
+    border-left-color: var(--info-border);
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-md) 0;
+    background-color: var(--white);
+}
+
+thead {
+    background-color: var(--light-background);
+}
+
+th {
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-subtle);
+}
+
+td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+}
+
+tr:hover {
+    background-color: var(--hover-background);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+    display: inline-block;
+    padding: 12px 16px;
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-blue-hover);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-blue);
+    color: var(--white);
+}
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
 code {
-    background-color: #e0e0e0;
-    padding: 5px 10px;
+    background-color: var(--light-background);
+    padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
 }
 
-ul {
-    list-style-type: none;
+pre {
+    background-color: var(--dark-background);
+    color: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: var(--spacing-md) 0;
+}
+
+pre code {
+    background: none;
+    color: var(--white);
     padding: 0;
 }
 
+/* ============================================
+   BADGES
+   ============================================ */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.badge-success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+}
+
+.badge-warning {
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
+}
+
+.badge-error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+}
+
+.badge-info {
+    background-color: var(--info-bg);
+    color: var(--info-text);
+}
+
+/* ============================================
+   LISTS
+   ============================================ */
+ul, ol {
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-xl);
+}
+
 li {
-    margin: 10px 0;
+    margin: var(--spacing-sm) 0;
+    color: var(--text-secondary);
 }
 
-a {
-    color: #0f62fe;
-    text-decoration: none;
+.list-unstyled {
+    list-style: none;
+    padding-left: 0;
 }
 
-a:hover {
-    text-decoration: underline;
+/* ============================================
+   PROGRESS BARS
+   ============================================ */
+.progress {
+    width: 100%;
+    height: 8px;
+    background-color: var(--border-subtle);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: var(--spacing-sm) 0;
 }
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-blue);
+    transition: width 0.3s ease;
+}
+
+.progress-bar-success {
+    background-color: var(--success-border);
+}
+
+.progress-bar-warning {
+    background-color: var(--warning-border);
+}
+
+.progress-bar-error {
+    background-color: var(--error-border);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+    
+    .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .tabs {
+        flex-wrap: wrap;
+    }
+    
+    .stat-value {
+        font-size: 36px;
+    }
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-blue { color: var(--primary-blue); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mt-4 { margin-top: var(--spacing-xl); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mb-4 { margin-bottom: var(--spacing-xl); }
+
+.p-0 { padding: 0; }
+.p-1 { padding: var(--spacing-sm); }
+.p-2 { padding: var(--spacing-md); }
+.p-3 { padding: var(--spacing-lg); }
+.p-4 { padding: var(--spacing-xl); }
+
+/* Made with Bob */

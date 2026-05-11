@@ -3,12 +3,844 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deployment Dashboard</title>
+    <title>Step 4: Deployment Dashboard - Trade Settlement Prediction</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Deployment Dashboard</h1>
-    <p>This is a placeholder. Use Streamlit app.py for interactive dashboard.</p>
-    <p>Run: <code>streamlit run app.py</code></p>
+    <!-- IBM Header -->
+    <div class="ibm-header">
+        <div class="ibm-header-logo">IBM watsonx - Trade Settlement Prediction</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Step 4: Deployment Dashboard</h1>
+            <p class="subtitle">Model deployment, testing, and usage guide</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab" data-tab="deployment-setup">🚀 Deployment Setup</button>
+            <button class="tab" data-tab="app-features">✨ App Features</button>
+            <button class="tab" data-tab="test-predictions">🎯 Test Predictions</button>
+            <button class="tab" data-tab="usage-guide">📖 Usage Guide</button>
+        </div>
+
+        <!-- Tab 1: Deployment Setup -->
+        <div id="deployment-setup" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Deployment Status</h2>
+                <div class="card-body">
+                    <div class="notification notification-success">
+                        <strong>✅ Local Deployment Ready:</strong> Streamlit application is configured and ready to run
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deployment Options -->
+            <div class="card mt-4">
+                <h3 class="card-header">Deployment Options</h3>
+                <div class="card-body">
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h4>Option 1: Local Streamlit (Current)</h4>
+                            <div class="notification notification-success">
+                                <strong>Status:</strong> ✅ Active
+                            </div>
+                            <ul>
+                                <li><strong>Platform:</strong> Streamlit</li>
+                                <li><strong>Hosting:</strong> Local machine</li>
+                                <li><strong>Access:</strong> localhost:8501</li>
+                                <li><strong>Best For:</strong> Development, testing, demos</li>
+                            </ul>
+                            <pre><code>streamlit run app.py</code></pre>
+                        </div>
+
+                        <div class="card">
+                            <h4>Option 2: watsonx.ai Runtime (Future)</h4>
+                            <div class="notification notification-info">
+                                <strong>Status:</strong> 📋 Planned
+                            </div>
+                            <ul>
+                                <li><strong>Platform:</strong> IBM watsonx.ai</li>
+                                <li><strong>Hosting:</strong> Cloud (AutoAI)</li>
+                                <li><strong>Access:</strong> REST API</li>
+                                <li><strong>Best For:</strong> Production, scalability</li>
+                            </ul>
+                            <p class="text-secondary">Requires MCP server access</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Environment Setup -->
+            <div class="card mt-4">
+                <h3 class="card-header">Environment Setup</h3>
+                <div class="card-body">
+                    <h4>System Requirements</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Requirement</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Python</td>
+                                <td>3.8 or higher</td>
+                                <td><span class="badge badge-success">✓ Required</span></td>
+                            </tr>
+                            <tr>
+                                <td>pip</td>
+                                <td>Latest version</td>
+                                <td><span class="badge badge-success">✓ Required</span></td>
+                            </tr>
+                            <tr>
+                                <td>Memory</td>
+                                <td>4GB RAM minimum</td>
+                                <td><span class="badge badge-success">✓ Recommended</span></td>
+                            </tr>
+                            <tr>
+                                <td>Storage</td>
+                                <td>500MB free space</td>
+                                <td><span class="badge badge-success">✓ Required</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 class="mt-4">Dependencies Installation</h4>
+                    <pre><code># Install all required packages
+pip install -r requirements.txt
+
+# Verify installation
+python -c "import streamlit; print(streamlit.__version__)"
+python -c "import sklearn; print(sklearn.__version__)"
+python -c "import pandas; print(pandas.__version__)"</code></pre>
+
+                    <div class="notification notification-info mt-3">
+                        <strong>Installed Packages:</strong>
+                        <ul class="mb-0">
+                            <li>pandas (2.0.0+) - Data manipulation</li>
+                            <li>numpy (1.24.0+) - Numerical computing</li>
+                            <li>scikit-learn (1.3.0+) - Machine learning</li>
+                            <li>streamlit (1.28.0+) - Web application</li>
+                            <li>plotly (5.17.0+) - Interactive visualizations</li>
+                            <li>openpyxl (3.1.0+) - Excel file handling</li>
+                            <li>joblib (1.3.0+) - Model serialization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Structure -->
+            <div class="card mt-4">
+                <h3 class="card-header">Deployment Files</h3>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Purpose</th>
+                                <th>Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>app.py</code></td>
+                                <td>Main Streamlit application</td>
+                                <td><span class="badge badge-success">✓ Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>models/settlement_prediction_model.pkl</code></td>
+                                <td>Trained ML model</td>
+                                <td><span class="badge badge-success">✓ Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>models/model_metadata.json</code></td>
+                                <td>Model configuration</td>
+                                <td><span class="badge badge-success">✓ Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>results/reports/*.xlsx</code></td>
+                                <td>Analysis reports</td>
+                                <td><span class="badge badge-warning">○ Optional</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>Data/xfm_trades_shaped.csv</code></td>
+                                <td>Input dataset</td>
+                                <td><span class="badge badge-warning">○ Optional</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>requirements.txt</code></td>
+                                <td>Python dependencies</td>
+                                <td><span class="badge badge-success">✓ Yes</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Health Check -->
+            <div class="card mt-4">
+                <h3 class="card-header">Deployment Health Check</h3>
+                <div class="card-body">
+                    <h4>Pre-Deployment Checklist</h4>
+                    <ul class="list-unstyled">
+                        <li>✅ <strong>Dependencies installed:</strong> All packages from requirements.txt</li>
+                        <li>✅ <strong>Model files present:</strong> .pkl and .json files in models/</li>
+                        <li>✅ <strong>Data files accessible:</strong> CSV files in Data/</li>
+                        <li>✅ <strong>Reports generated:</strong> Excel files in results/reports/</li>
+                        <li>✅ <strong>Port available:</strong> Port 8501 not in use</li>
+                    </ul>
+
+                    <h4 class="mt-3">Quick Health Check Command</h4>
+                    <pre><code># Run this to verify everything is ready
+python -c "
+import os
+import joblib
+import json
+
+# Check model files
+assert os.path.exists('models/settlement_prediction_model.pkl'), 'Model file missing'
+assert os.path.exists('models/model_metadata.json'), 'Metadata missing'
+
+# Load model
+model = joblib.load('models/settlement_prediction_model.pkl')
+with open('models/model_metadata.json') as f:
+    metadata = json.load(f)
+
+print('✅ All checks passed!')
+print(f'Model: {metadata[\"model_name\"]}')
+print(f'Accuracy: {metadata[\"accuracy\"]*100:.2f}%')
+"</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: App Features -->
+        <div id="app-features" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Streamlit Application Features</h2>
+                <div class="card-body">
+                    <div class="notification notification-info">
+                        <strong>Interactive Dashboard:</strong> 6-tab Streamlit application with comprehensive ML workflow visualization
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Overview -->
+            <div class="card mt-4">
+                <h3 class="card-header">Dashboard Tabs</h3>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tab</th>
+                                <th>Features</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>📊 Data Preparation</strong></td>
+                                <td>
+                                    • Dataset overview<br>
+                                    • Feature descriptions<br>
+                                    • Target distribution<br>
+                                    • Sample records
+                                </td>
+                                <td>Understand the input data</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🔄 Data Lineage</strong></td>
+                                <td>
+                                    • Multi-regional architecture<br>
+                                    • Data flow diagrams<br>
+                                    • ETL pipeline details<br>
+                                    • Impact analysis
+                                </td>
+                                <td>Track data provenance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>✅ Data Quality</strong></td>
+                                <td>
+                                    • Quality metrics<br>
+                                    • Missing value analysis<br>
+                                    • Duplicate detection<br>
+                                    • Quality score
+                                </td>
+                                <td>Assess data reliability</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🔧 Feature Engineering</strong></td>
+                                <td>
+                                    • Created features list<br>
+                                    • Feature categories<br>
+                                    • Feature statistics<br>
+                                    • Engineering summary
+                                </td>
+                                <td>Review feature creation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🤖 Model Results</strong></td>
+                                <td>
+                                    • Model comparison<br>
+                                    • Performance metrics<br>
+                                    • Confusion matrix<br>
+                                    • Feature importance
+                                </td>
+                                <td>Evaluate model performance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🎯 Test Model</strong></td>
+                                <td>
+                                    • Interactive prediction<br>
+                                    • Input form<br>
+                                    • Probability scores<br>
+                                    • Risk factors
+                                </td>
+                                <td>Test predictions live</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Key Capabilities -->
+            <div class="card mt-4">
+                <h3 class="card-header">Key Capabilities</h3>
+                <div class="card-body">
+                    <div class="grid grid-2">
+                        <div>
+                            <h4>📊 Data Visualization</h4>
+                            <ul>
+                                <li>Interactive Plotly charts</li>
+                                <li>Distribution plots</li>
+                                <li>Confusion matrix heatmap</li>
+                                <li>Feature importance bars</li>
+                                <li>Real-time data tables</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>🎨 User Interface</h4>
+                            <ul>
+                                <li>IBM Carbon Design System</li>
+                                <li>Responsive layout</li>
+                                <li>Tab-based navigation</li>
+                                <li>Color-coded metrics</li>
+                                <li>Expandable sections</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>📈 Analytics</h4>
+                            <ul>
+                                <li>Model performance metrics</li>
+                                <li>Per-class analysis</li>
+                                <li>Cross-validation scores</li>
+                                <li>Feature importance ranking</li>
+                                <li>Quality assessments</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>🔧 Functionality</h4>
+                            <ul>
+                                <li>Load cached data</li>
+                                <li>Interactive predictions</li>
+                                <li>Export capabilities</li>
+                                <li>Documentation links</li>
+                                <li>Error handling</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Access Information -->
+            <div class="card mt-4">
+                <h3 class="card-header">How to Access</h3>
+                <div class="card-body">
+                    <h4>Step 1: Start the Application</h4>
+                    <pre><code>streamlit run app.py</code></pre>
+
+                    <h4 class="mt-3">Step 2: Open in Browser</h4>
+                    <p>The application will automatically open in your default browser at:</p>
+                    <pre><code>http://localhost:8501</code></pre>
+
+                    <h4 class="mt-3">Step 3: Navigate Tabs</h4>
+                    <p>Use the tab navigation at the top to explore different sections of the dashboard.</p>
+
+                    <div class="notification notification-success mt-3">
+                        <strong>💡 Pro Tip:</strong> The dashboard automatically loads data from the results/ and models/ folders. Make sure to run the pipeline first (<code>python run_pipeline.py</code>) to generate all necessary files.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screenshots Placeholder -->
+            <div class="card mt-4">
+                <h3 class="card-header">Dashboard Preview</h3>
+                <div class="card-body">
+                    <div class="notification notification-info">
+                        <strong>Live Dashboard:</strong> Run <code>streamlit run app.py</code> to see the full interactive experience with:
+                        <ul class="mb-0">
+                            <li>Real-time data loading and caching</li>
+                            <li>Interactive charts and visualizations</li>
+                            <li>Responsive design that adapts to screen size</li>
+                            <li>Professional IBM watsonx styling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Test Predictions -->
+        <div id="test-predictions" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Test Prediction Interface</h2>
+                <div class="card-body">
+                    <div class="notification notification-success">
+                        <strong>Interactive Testing:</strong> Use the Streamlit app's "Test Model" tab for live predictions
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Prediction Scenarios -->
+            <div class="card mt-4">
+                <h3 class="card-header">Sample Prediction Scenarios</h3>
+                <div class="card-body">
+                    <h4>Scenario 1: Low Risk Trade (Expected: MATCHED)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Risk Factor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Message Function</td>
+                                <td>PREADVICE</td>
+                                <td><span class="badge badge-success">✓ Low Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>Trading Venue</td>
+                                <td>EXCH</td>
+                                <td><span class="badge badge-success">✓ Low Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>Currency</td>
+                                <td>USD</td>
+                                <td><span class="badge badge-success">✓ Major Currency</span></td>
+                            </tr>
+                            <tr>
+                                <td>Deal Price</td>
+                                <td>250.00</td>
+                                <td><span class="badge badge-success">✓ Normal Range</span></td>
+                            </tr>
+                            <tr>
+                                <td>Settlement Priority</td>
+                                <td>HIGH</td>
+                                <td><span class="badge badge-success">✓ High Priority</span></td>
+                            </tr>
+                            <tr>
+                                <td>Days to Settle</td>
+                                <td>2</td>
+                                <td><span class="badge badge-success">✓ Short Timeline</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="notification notification-success mt-2">
+                        <strong>Expected Prediction:</strong> MATCHED (High Confidence ~75%)
+                    </div>
+
+                    <h4 class="mt-4">Scenario 2: Medium Risk Trade (Expected: UNMATCHED)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Risk Factor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Message Function</td>
+                                <td>NEWM</td>
+                                <td><span class="badge badge-warning">○ Medium Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>Trading Venue</td>
+                                <td>SECM</td>
+                                <td><span class="badge badge-warning">○ Medium Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>Currency</td>
+                                <td>INR</td>
+                                <td><span class="badge badge-warning">○ Minor Currency</span></td>
+                            </tr>
+                            <tr>
+                                <td>Deal Price</td>
+                                <td>450.00</td>
+                                <td><span class="badge badge-warning">○ Higher Value</span></td>
+                            </tr>
+                            <tr>
+                                <td>Settlement Priority</td>
+                                <td>MEDIUM</td>
+                                <td><span class="badge badge-warning">○ Medium Priority</span></td>
+                            </tr>
+                            <tr>
+                                <td>Days to Settle</td>
+                                <td>5</td>
+                                <td><span class="badge badge-warning">○ Longer Timeline</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="notification notification-warning mt-2">
+                        <strong>Expected Prediction:</strong> UNMATCHED (Medium Confidence ~50%)
+                    </div>
+
+                    <h4 class="mt-4">Scenario 3: High Risk Trade (Expected: ERROR)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Risk Factor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Message Function</td>
+                                <td>CANC</td>
+                                <td><span class="badge badge-error">✗ High Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>Trading Venue</td>
+                                <td>OTCO</td>
+                                <td><span class="badge badge-error">✗ High Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>Currency</td>
+                                <td>CNY</td>
+                                <td><span class="badge badge-error">✗ Minor Currency</span></td>
+                            </tr>
+                            <tr>
+                                <td>Deal Price</td>
+                                <td>850.00</td>
+                                <td><span class="badge badge-error">✗ High Value</span></td>
+                            </tr>
+                            <tr>
+                                <td>Settlement Priority</td>
+                                <td>LOW</td>
+                                <td><span class="badge badge-error">✗ Low Priority</span></td>
+                            </tr>
+                            <tr>
+                                <td>Days to Settle</td>
+                                <td>10</td>
+                                <td><span class="badge badge-error">✗ Long Timeline</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="notification notification-error mt-2">
+                        <strong>Expected Prediction:</strong> ERROR (Variable Confidence)
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Test -->
+            <div class="card mt-4">
+                <h3 class="card-header">How to Test Predictions</h3>
+                <div class="card-body">
+                    <h4>Using Streamlit Dashboard</h4>
+                    <ol>
+                        <li>Launch the dashboard: <code>streamlit run app.py</code></li>
+                        <li>Navigate to the <strong>"🎯 Test Model"</strong> tab</li>
+                        <li>Fill in the trade details form:
+                            <ul>
+                                <li>Select message function (PREADVICE, NEWM, CANC, AMND)</li>
+                                <li>Choose trading venue (EXCH, SECM, OTCO)</li>
+                                <li>Select currency (USD, EUR, GBP, JPY, etc.)</li>
+                                <li>Enter deal price</li>
+                                <li>Set settlement and party priorities</li>
+                                <li>Choose trade and settlement dates</li>
+                            </ul>
+                        </li>
+                        <li>Click <strong>"🔮 Predict Settlement Outcome"</strong></li>
+                        <li>Review the prediction results with probability scores</li>
+                    </ol>
+
+                    <div class="notification notification-info mt-3">
+                        <strong>Note:</strong> The current interface shows example predictions. For actual model predictions, the system would need to engineer all 22 features from the input parameters using the same logic as in training.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interpretation Guide -->
+            <div class="card mt-4">
+                <h3 class="card-header">Prediction Interpretation Guide</h3>
+                <div class="card-body">
+                    <h4>Understanding Probability Scores</h4>
+                    <ul>
+                        <li><strong>High Confidence (>70%):</strong> Model is very confident in the prediction</li>
+                        <li><strong>Medium Confidence (50-70%):</strong> Moderate confidence, consider additional review</li>
+                        <li><strong>Low Confidence (<50%):</strong> Uncertain prediction, manual review recommended</li>
+                    </ul>
+
+                    <h4 class="mt-3">Risk Factors to Consider</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Low Risk</th>
+                                <th>High Risk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Trading Venue</td>
+                                <td>EXCH</td>
+                                <td>OTCO</td>
+                            </tr>
+                            <tr>
+                                <td>Currency</td>
+                                <td>USD, EUR, GBP, JPY</td>
+                                <td>Other currencies</td>
+                            </tr>
+                            <tr>
+                                <td>Priority</td>
+                                <td>HIGH</td>
+                                <td>LOW</td>
+                            </tr>
+                            <tr>
+                                <td>Days to Settle</td>
+                                <td>1-3 days</td>
+                                <td>>5 days</td>
+                            </tr>
+                            <tr>
+                                <td>Message Function</td>
+                                <td>PREADVICE</td>
+                                <td>CANC</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Usage Guide -->
+        <div id="usage-guide" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Complete Usage Guide</h2>
+                <div class="card-body">
+                    <div class="notification notification-info">
+                        <strong>End-to-End Workflow:</strong> From setup to production use
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Start -->
+            <div class="card mt-4">
+                <h3 class="card-header">Quick Start (5 Minutes)</h3>
+                <div class="card-body">
+                    <h4>Step 1: Setup (1 minute)</h4>
+                    <pre><code># Install dependencies
+pip install -r requirements.txt</code></pre>
+
+                    <h4 class="mt-3">Step 2: Run Pipeline (2 minutes)</h4>
+                    <pre><code># Execute ML pipeline
+python3 run_pipeline.py
+
+# Expected output:
+# ✅ PIPELINE COMPLETED SUCCESSFULLY!
+# ⏱️  Execution Time: ~8-10 seconds</code></pre>
+
+                    <h4 class="mt-3">Step 3: Launch Dashboard (2 minutes)</h4>
+                    <pre><code># Start Streamlit app
+streamlit run app.py
+
+# Opens automatically at http://localhost:8501</code></pre>
+
+                    <div class="notification notification-success mt-3">
+                        <strong>✅ You're Ready!</strong> The dashboard is now running with all features available.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="card mt-4">
+                <h3 class="card-header">Best Practices</h3>
+                <div class="card-body">
+                    <h4>For Development</h4>
+                    <ul>
+                        <li>Run pipeline after any data changes</li>
+                        <li>Review quality reports before model training</li>
+                        <li>Test with sample scenarios before production</li>
+                        <li>Keep model metadata updated</li>
+                        <li>Document any custom modifications</li>
+                    </ul>
+
+                    <h4 class="mt-3">For Production Use</h4>
+                    <ul>
+                        <li>Schedule regular model retraining</li>
+                        <li>Monitor prediction accuracy over time</li>
+                        <li>Set up alerts for low-confidence predictions</li>
+                        <li>Maintain audit logs of predictions</li>
+                        <li>Implement feedback loop for model improvement</li>
+                    </ul>
+
+                    <h4 class="mt-3">For Maintenance</h4>
+                    <ul>
+                        <li>Update dependencies regularly</li>
+                        <li>Backup models before retraining</li>
+                        <li>Version control all code changes</li>
+                        <li>Document performance metrics</li>
+                        <li>Review and update features periodically</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Common Tasks -->
+            <div class="card mt-4">
+                <h3 class="card-header">Common Tasks</h3>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Command</th>
+                                <th>Frequency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Retrain model with new data</td>
+                                <td><code>python3 run_pipeline.py</code></td>
+                                <td>Weekly/Monthly</td>
+                            </tr>
+                            <tr>
+                                <td>Launch dashboard</td>
+                                <td><code>streamlit run app.py</code></td>
+                                <td>As needed</td>
+                            </tr>
+                            <tr>
+                                <td>View static dashboards</td>
+                                <td><code>open dashboard/index.html</code></td>
+                                <td>As needed</td>
+                            </tr>
+                            <tr>
+                                <td>Check model performance</td>
+                                <td>Review <code>results/reports/03_model_results_report.xlsx</code></td>
+                                <td>After retraining</td>
+                            </tr>
+                            <tr>
+                                <td>Update dependencies</td>
+                                <td><code>pip install -r requirements.txt --upgrade</code></td>
+                                <td>Quarterly</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="card mt-4">
+                <h3 class="card-header">Troubleshooting</h3>
+                <div class="card-body">
+                    <h4>Dashboard Won't Start</h4>
+                    <div class="notification notification-warning">
+                        <strong>Issue:</strong> Streamlit fails to start<br>
+                        <strong>Solution:</strong>
+                        <ul class="mb-0">
+                            <li>Check if port 8501 is already in use</li>
+                            <li>Verify Streamlit is installed: <code>pip show streamlit</code></li>
+                            <li>Try: <code>streamlit run app.py --server.port 8502</code></li>
+                        </ul>
+                    </div>
+
+                    <h4 class="mt-3">Model File Not Found</h4>
+                    <div class="notification notification-warning">
+                        <strong>Issue:</strong> Cannot load model file<br>
+                        <strong>Solution:</strong>
+                        <ul class="mb-0">
+                            <li>Run pipeline first: <code>python3 run_pipeline.py</code></li>
+                            <li>Check models/ folder exists and contains .pkl file</li>
+                            <li>Verify file permissions</li>
+                        </ul>
+                    </div>
+
+                    <h4 class="mt-3">Poor Model Performance</h4>
+                    <div class="notification notification-warning">
+                        <strong>Issue:</strong> Accuracy below expectations<br>
+                        <strong>Solution:</strong>
+                        <ul class="mb-0">
+                            <li>Check data quality report for issues</li>
+                            <li>Ensure sufficient training data (>1000 records)</li>
+                            <li>Review class balance in target variable</li>
+                            <li>Consider additional feature engineering</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Resources -->
+            <div class="card mt-4">
+                <h3 class="card-header">Support Resources</h3>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>Location</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Project README</td>
+                                <td><code>README.md</code></td>
+                                <td>Quick start guide</td>
+                            </tr>
+                            <tr>
+                                <td>Implementation Guide</td>
+                                <td><code>Instructions Guide/IMPLEMENTATION_GUIDE.md</code></td>
+                                <td>Detailed instructions</td>
+                            </tr>
+                            <tr>
+                                <td>Lineage Documentation</td>
+                                <td><code>Lineage Local/*.md</code></td>
+                                <td>Data flow details</td>
+                            </tr>
+                            <tr>
+                                <td>GitHub Repository</td>
+                                <td><a href="https://github.com/gredss/ds-ml-testing" target="_blank">github.com/gredss/ds-ml-testing</a></td>
+                                <td>Source code</td>
+                            </tr>
+                            <tr>
+                                <td>HTML Dashboards</td>
+                                <td><code>dashboard/*.html</code></td>
+                                <td>Static documentation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="card mt-4">
+            <div class="card-body text-center">
+                <p class="text-secondary mb-2">Navigation:</p>
+                <a href="03_model_dashboard.html" class="btn btn-secondary">← Step 3: Model Performance</a>
+                <a href="index.html" class="btn btn-primary">Final Dashboard (12 Tabs) →</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
 </body>
 </html>

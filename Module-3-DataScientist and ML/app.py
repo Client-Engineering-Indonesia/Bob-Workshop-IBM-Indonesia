@@ -732,13 +732,13 @@ def tab_test_model():
     
     with col1:
         msg_fctn = st.selectbox("Message Function", ['PREADVICE', 'NEWM', 'CANC', 'AMND'])
-        trd_place = st.selectbox("Trading Venue", ['EXCH', 'SECM', 'OTCO'])
+        trd_place = st.selectbox("Trading Venue", ['EXCH', 'SECM', 'OTCO', 'PRIM'])
         currency_cd = st.selectbox("Currency", ['USD', 'EUR', 'GBP', 'JPY', 'INR', 'CNY'])
     
     with col2:
         deal_price = st.number_input("Deal Price", min_value=0.0, value=250.0, step=10.0)
         settle_priority = st.selectbox("Settlement Priority", ['HIGH', 'MEDIUM', 'LOW'])
-        party_priority = st.selectbox("Party Priority", ['HIGH', 'MEDIUM', 'LOW', 'UNKNOWN'])
+        party_priority = st.selectbox("Party Priority", ['HIGH', 'MEDIUM', 'LOW'])
     
     with col3:
         trade_date = st.date_input("Trade Date", value=datetime.now())
@@ -748,47 +748,128 @@ def tab_test_model():
     
     # Predict button
     if st.button("🔮 Predict Settlement Outcome", type="primary"):
-        # Note: This is a simplified prediction interface
-        # In production, you would need to engineer all features as done in training
-        
-        st.markdown("### Prediction Results")
-        
-        # Display prediction results
-        st.success("✅ Prediction generated based on input parameters")
-        
-        # Show example prediction format
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.markdown('<div class="success-box">', unsafe_allow_html=True)
-            st.markdown("#### MATCHED")
-            st.markdown("**Probability: 75.3%**")
-            st.progress(0.753)
-            st.markdown('</div>', unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown('<div class="warning-box">', unsafe_allow_html=True)
-            st.markdown("#### UNMATCHED")
-            st.markdown("**Probability: 18.2%**")
-            st.progress(0.182)
-            st.markdown('</div>', unsafe_allow_html=True)
-        
-        with col3:
-            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.markdown("#### ERROR")
-            st.markdown("**Probability: 6.5%**")
-            st.progress(0.065)
-            st.markdown('</div>', unsafe_allow_html=True)
-        
-        st.success("✅ Predicted Outcome: **MATCHED** (High Confidence)")
-        
-        st.markdown("#### Risk Factors")
-        st.markdown("""
-        - ✓ Major currency (USD/EUR/GBP/JPY)
-        - ✓ Exchange venue (lower risk)
-        - ✓ High settlement priority
-        - ⚠️ Settlement timeline: {} days
-        """.format(days_to_settle))
+        try:
+            import sys
+            sys.path.append('src')
+            from feature_engineering import FeatureEngineer
+            
+            # Create input dataframe with required columns
+            input_df = pd.DataFrame({
+                'sndr_msg_id': ['TEST-001'],
+                'msg_fctn': [msg_fctn],
+                'settle_dte': [pd.Timestamp(settle_date)],
+                'trade_dte': [pd.Timestamp(trade_date)],
+                'fin_instrmnt_id': ['US0000000000'],
+                'trd_place': [trd_place],
+                'deal_price': [deal_price],
+                'currency_cd': [currency_cd],
+                'settle_status': ['MATCHED'],  # Dummy value, not used for prediction
+                'settle_priority': [settle_priority],
+                'party_priority': [party_priority]
+            })
+            
+            # Use the same FeatureEngineer class as training
+            engineer = FeatureEngineer(input_df)
+            df_engineered = engineer.create_all_features()
+            X, y, feature_cols = engineer.prepare_for_modeling()
+            
+            # Fill any NaN values that might have been created
+            X = X.fillna(0)
+            
+            # Make prediction
+            prediction = model.predict(X)[0]
+            probabilities = model.predict_proba(X)[0]
+            
+            # Get class names
+            classes = metadata['classes']
+            
+            # Create probability dictionary
+            prob_dict = dict(zip(classes, probabilities))
+            
+            # Display results
+            st.markdown("### Prediction Results")
+            st.success("✅ Real prediction from trained model")
+            
+            # Show probabilities
+            col1, col2, col3 = st.columns(3)
+            
+            # Sort by probability
+            sorted_probs = sorted(prob_dict.items(), key=lambda x: x[1], reverse=True)
+            
+            for i, (col, (class_name, prob)) in enumerate(zip([col1, col2, col3], sorted_probs)):
+                with col:
+                    if class_name == 'MATCHED':
+                        box_class = 'success-box'
+                    elif class_name == 'UNMATCHED':
+                        box_class = 'warning-box'
+                    else:
+                        box_class = 'metric-card'
+                    
+                    st.markdown(f'<div class="{box_class}">', unsafe_allow_html=True)
+                    st.markdown(f"#### {class_name}")
+                    st.markdown(f"**Probability: {prob*100:.1f}%**")
+                    st.progress(float(prob))
+                    st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Show predicted outcome
+            confidence = prob_dict[prediction] * 100
+            if confidence >= 70:
+                confidence_level = "High Confidence"
+                emoji = "✅"
+            elif confidence >= 50:
+                confidence_level = "Medium Confidence"
+                emoji = "⚠️"
+            else:
+                confidence_level = "Low Confidence"
+                emoji = "❓"
+            
+            st.success(f"{emoji} Predicted Outcome: **{prediction}** ({confidence_level} - {confidence:.1f}%)")
+            
+            # Risk factors analysis
+            st.markdown("#### Risk Factors Analysis")
+            risk_factors = []
+            
+            major_currencies = ['USD', 'EUR', 'GBP', 'JPY']
+            if currency_cd in major_currencies:
+                risk_factors.append("✓ Major currency (USD/EUR/GBP/JPY) - Lower risk")
+            else:
+                risk_factors.append("⚠️ Minor currency - Higher risk")
+            
+            if trd_place == 'EXCH':
+                risk_factors.append("✓ Exchange venue - Lowest risk")
+            elif trd_place == 'SECM' or trd_place == 'PRIM':
+                risk_factors.append("⚠️ Securities/Primary market - Medium risk")
+            else:
+                risk_factors.append("🔴 OTC venue - Higher risk")
+            
+            if settle_priority == 'HIGH':
+                risk_factors.append("✓ High settlement priority - Lower risk")
+            elif settle_priority == 'MEDIUM':
+                risk_factors.append("⚠️ Medium settlement priority")
+            else:
+                risk_factors.append("🔴 Low settlement priority - Higher risk")
+            
+            if days_to_settle == 0:
+                risk_factors.append("🔴 Same-day settlement - Very urgent")
+            elif days_to_settle == 1:
+                risk_factors.append("⚠️ Next-day settlement - Urgent")
+            elif days_to_settle <= 3:
+                risk_factors.append("✓ Normal settlement timeline (2-3 days)")
+            else:
+                risk_factors.append("⚠️ Extended settlement period (>3 days)")
+            
+            if msg_fctn == 'PREADVICE':
+                risk_factors.append("✓ Pre-advice message - Lower risk")
+            else:
+                risk_factors.append("⚠️ Non-preadvice message")
+            
+            for factor in risk_factors:
+                st.markdown(f"- {factor}")
+            
+        except Exception as e:
+            st.error(f"Error making prediction: {str(e)}")
+            st.exception(e)
+            st.info("Please ensure the model was trained with the same features.")
     
     # Model information
     with st.expander("ℹ️ Model Information"):

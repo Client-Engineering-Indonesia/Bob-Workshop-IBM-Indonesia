@@ -3,12 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Documentation Dashboard</title>
+    <title>Step 2: Code Documentation Dashboard - Trade Settlement Prediction</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Code Documentation Dashboard</h1>
-    <p>This is a placeholder. Use Streamlit app.py for interactive dashboard.</p>
-    <p>Run: <code>streamlit run app.py</code></p>
+    <!-- IBM Header -->
+    <div class="ibm-header">
+        <div class="ibm-header-logo">IBM watsonx - Trade Settlement Prediction</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Step 2: Code Documentation Dashboard</h1>
+            <p class="subtitle">Project structure, key functions, and execution guide</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab" data-tab="code-structure">📁 Code Structure</button>
+            <button class="tab" data-tab="key-functions">🔧 Key Functions</button>
+            <button class="tab" data-tab="how-to-run">▶️ How to Run</button>
+        </div>
+
+        <!-- Tab 1: Code Structure -->
+        <div id="code-structure" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Project Structure</h2>
+                <div class="card-body">
+                    <div class="notification notification-info">
+                        <strong>Architecture:</strong> Modular Python project with clear separation of concerns
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directory Tree -->
+            <div class="card mt-4">
+                <h3 class="card-header">Directory Organization</h3>
+                <div class="card-body">
+                    <pre><code>Module-3-DataScientist and ML/
+├── 📁 Data/                          # Input datasets
+│   ├── octo_trades_shaped.csv        # Raw trade data
+│   ├── xfm_trades_shaped.csv         # Transformed trade data
+│   └── Instructions.md               # Data documentation
+│
+├── 📁 src/                           # Source code modules
+│   ├── data_processing.py            # Data loading & cleaning
+│   ├── feature_engineering.py        # Feature creation
+│   ├── model_training.py             # ML model training
+│   ├── deployment.py                 # Deployment utilities
+│   └── utils.py                      # Helper functions
+│
+├── 📁 models/                        # Trained models
+│   ├── settlement_prediction_model.pkl
+│   └── model_metadata.json
+│
+├── 📁 results/                       # Output files
+│   ├── reports/                      # Excel reports
+│   │   ├── 01_data_quality_report.xlsx
+│   │   ├── 02_feature_engineering_report.xlsx
+│   │   └── 03_model_results_report.xlsx
+│   ├── figures/                      # Visualizations
+│   └── metrics/                      # Performance metrics
+│
+├── 📁 dashboard/                     # HTML dashboards
+│   ├── 01_analysis_dashboard.html
+│   ├── 02_code_dashboard.html
+│   ├── 03_model_dashboard.html
+│   ├── 04_deployment_dashboard.html
+│   ├── index.html
+│   ├── css/styles.css
+│   ├── js/main.js
+│   └── data/results.json
+│
+├── 📁 Instructions Guide/            # Documentation
+│   ├── IMPLEMENTATION_GUIDE.md
+│   └── Instructions-LocalLineage.md
+│
+├── 📁 Lineage Local/                 # Data lineage docs
+│   ├── ca_daily_trades_dashboard.md
+│   └── xfm_trades_dashboard.md
+│
+├── 📄 app.py                         # Streamlit dashboard
+├── 📄 run_pipeline.py                # Main ML pipeline
+├── 📄 requirements.txt               # Dependencies
+├── 📄 README.md                      # Project documentation
+└── 📄 .gitignore                     # Git ignore rules</code></pre>
+                </div>
+            </div>
+
+            <!-- Module Descriptions -->
+            <div class="card mt-4">
+                <h3 class="card-header">Core Modules</h3>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Purpose</th>
+                                <th>Key Classes/Functions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>data_processing.py</code></td>
+                                <td>Data loading, cleaning, quality assessment</td>
+                                <td>DataProcessor class</td>
+                            </tr>
+                            <tr>
+                                <td><code>feature_engineering.py</code></td>
+                                <td>Feature creation and transformation</td>
+                                <td>FeatureEngineer class</td>
+                            </tr>
+                            <tr>
+                                <td><code>model_training.py</code></td>
+                                <td>ML model training and evaluation</td>
+                                <td>ModelTrainer class</td>
+                            </tr>
+                            <tr>
+                                <td><code>deployment.py</code></td>
+                                <td>Model deployment utilities</td>
+                                <td>Deployment helpers</td>
+                            </tr>
+                            <tr>
+                                <td><code>utils.py</code></td>
+                                <td>Common utility functions</td>
+                                <td>Helper functions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Design Patterns -->
+            <div class="card mt-4">
+                <h3 class="card-header">Design Patterns & Best Practices</h3>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Object-Oriented Design:</strong> Each module uses classes for encapsulation</li>
+                        <li><strong>Single Responsibility:</strong> Each class has one clear purpose</li>
+                        <li><strong>Pipeline Pattern:</strong> Sequential data processing steps</li>
+                        <li><strong>Error Handling:</strong> Try-except blocks with informative messages</li>
+                        <li><strong>Logging:</strong> Print statements for progress tracking</li>
+                        <li><strong>Modularity:</strong> Reusable components across the project</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Key Functions -->
+        <div id="key-functions" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Key Functions Documentation</h2>
+                <div class="card-body">
+                    <div class="notification notification-success">
+                        <strong>Core Functionality:</strong> Essential functions that power the ML pipeline
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Processing Functions -->
+            <div class="card mt-4">
+                <h3 class="card-header">📊 Data Processing (data_processing.py)</h3>
+                <div class="card-body">
+                    <h4>Class: DataProcessor</h4>
+                    
+                    <div class="mt-3">
+                        <strong>load_data()</strong>
+                        <pre><code>def load_data(self):
+    """Load trade data from CSV"""
+    self.df = pd.read_csv(self.data_path)
+    return self.df</code></pre>
+                        <p class="text-secondary">Loads CSV data into pandas DataFrame</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <strong>analyze_data_quality()</strong>
+                        <pre><code>def analyze_data_quality(self):
+    """Comprehensive data quality assessment"""
+    # Calculates missing values, duplicates, quality score
+    return self.quality_report</code></pre>
+                        <p class="text-secondary">Analyzes data completeness and quality metrics</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <strong>clean_data()</strong>
+                        <pre><code>def clean_data(self):
+    """Clean and prepare data for modeling"""
+    # Removes duplicates, handles missing values
+    return self.df</code></pre>
+                        <p class="text-secondary">Cleans data by removing duplicates and handling nulls</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Engineering Functions -->
+            <div class="card mt-4">
+                <h3 class="card-header">🔧 Feature Engineering (feature_engineering.py)</h3>
+                <div class="card-body">
+                    <h4>Class: FeatureEngineer</h4>
+                    
+                    <div class="mt-3">
+                        <strong>create_all_features()</strong>
+                        <pre><code>def create_all_features(self):
+    """Create all engineered features"""
+    self.create_time_features()
+    self.create_price_features()
+    self.create_categorical_features()
+    self.create_risk_features()
+    return self.df</code></pre>
+                        <p class="text-secondary">Creates 16 new features from 11 original columns</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <strong>prepare_for_modeling()</strong>
+                        <pre><code>def prepare_for_modeling(self):
+    """Prepare features and target for ML"""
+    X = self.df[self.feature_cols]
+    y = self.df['settle_status']
+    return X, y, self.feature_cols</code></pre>
+                        <p class="text-secondary">Separates features (X) and target (y) for training</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Training Functions -->
+            <div class="card mt-4">
+                <h3 class="card-header">🤖 Model Training (model_training.py)</h3>
+                <div class="card-body">
+                    <h4>Class: ModelTrainer</h4>
+                    
+                    <div class="mt-3">
+                        <strong>train_all_models()</strong>
+                        <pre><code>def train_all_models(self):
+    """Train all three models"""
+    self._train_logistic_regression()
+    self._train_random_forest()
+    self._train_xgboost()  # or GradientBoosting
+    self._select_best_model()
+    return self.results</code></pre>
+                        <p class="text-secondary">Trains 3 models and selects the best performer</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <strong>save_model()</strong>
+                        <pre><code>def save_model(self, model_path, metadata_path):
+    """Save the best model and metadata"""
+    joblib.dump(self.best_model, model_path)
+    # Save metadata as JSON
+    return True</code></pre>
+                        <p class="text-secondary">Persists trained model and metadata to disk</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Execution -->
+            <div class="card mt-4">
+                <h3 class="card-header">▶️ Pipeline Execution (run_pipeline.py)</h3>
+                <div class="card-body">
+                    <div class="mt-3">
+                        <strong>main()</strong>
+                        <pre><code>def main():
+    """Execute the complete ML pipeline"""
+    # Step 1: Data Processing
+    processor = DataProcessor(data_path)
+    df_clean = processor.clean_data()
+    
+    # Step 2: Feature Engineering
+    engineer = FeatureEngineer(df_clean)
+    X, y, features = engineer.prepare_for_modeling()
+    
+    # Step 3: Model Training
+    trainer = ModelTrainer(X, y)
+    results = trainer.train_all_models()
+    trainer.save_model()
+    
+    return True</code></pre>
+                        <p class="text-secondary">Orchestrates the entire ML workflow</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: How to Run -->
+        <div id="how-to-run" class="tab-content">
+            <div class="card">
+                <h2 class="card-header">Execution Guide</h2>
+                <div class="card-body">
+                    <div class="notification notification-info">
+                        <strong>Prerequisites:</strong> Python 3.8+, pip, and required dependencies
+                    </div>
+                </div>
+            </div>
+
+            <!-- Installation -->
+            <div class="card mt-4">
+                <h3 class="card-header">Step 1: Installation</h3>
+                <div class="card-body">
+                    <h4>Clone Repository (if from GitHub)</h4>
+                    <pre><code>git clone https://github.com/gredss/ds-ml-testing.git
+cd ds-ml-testing</code></pre>
+
+                    <h4 class="mt-3">Install Dependencies</h4>
+                    <pre><code>pip install -r requirements.txt</code></pre>
+
+                    <div class="notification notification-success mt-3">
+                        <strong>Dependencies Installed:</strong>
+                        <ul class="mb-0">
+                            <li>pandas, numpy - Data processing</li>
+                            <li>scikit-learn - Machine learning</li>
+                            <li>xgboost - Gradient boosting (optional)</li>
+                            <li>streamlit - Interactive dashboard</li>
+                            <li>openpyxl - Excel file handling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Running the Pipeline -->
+            <div class="card mt-4">
+                <h3 class="card-header">Step 2: Run ML Pipeline</h3>
+                <div class="card-body">
+                    <h4>Execute Complete Pipeline</h4>
+                    <pre><code>python3 run_pipeline.py</code></pre>
+
+                    <div class="notification notification-info mt-3">
+                        <strong>Pipeline Execution:</strong>
+                        <ol class="mb-0">
+                            <li>Loads data from <code>Data/xfm_trades_shaped.csv</code></li>
+                            <li>Analyzes data quality and generates report</li>
+                            <li>Cleans data (removes duplicates, handles nulls)</li>
+                            <li>Engineers 16 new features</li>
+                            <li>Trains 3 ML models (Logistic Regression, Random Forest, Gradient Boosting)</li>
+                            <li>Selects best model based on F1-score</li>
+                            <li>Saves model and generates reports</li>
+                        </ol>
+                    </div>
+
+                    <h4 class="mt-3">Expected Output</h4>
+                    <pre><code>✅ PIPELINE COMPLETED SUCCESSFULLY!
+
+📁 Output Files Generated:
+   ✓ results/reports/01_data_quality_report.xlsx
+   ✓ results/reports/02_feature_engineering_report.xlsx
+   ✓ results/reports/03_model_results_report.xlsx
+   ✓ models/settlement_prediction_model.pkl
+   ✓ models/model_metadata.json
+
+⏱️  Execution Time: ~8-10 seconds
+🏆 Best Model: Gradient Boosting (62.75% accuracy)</code></pre>
+                </div>
+            </div>
+
+            <!-- Running the Dashboard -->
+            <div class="card mt-4">
+                <h3 class="card-header">Step 3: Launch Interactive Dashboard</h3>
+                <div class="card-body">
+                    <h4>Start Streamlit App</h4>
+                    <pre><code>streamlit run app.py</code></pre>
+
+                    <div class="notification notification-success mt-3">
+                        <strong>Dashboard Features:</strong>
+                        <ul class="mb-0">
+                            <li>📊 Data Preparation - Dataset overview and statistics</li>
+                            <li>🔄 Data Lineage - Multi-regional architecture</li>
+                            <li>✅ Data Quality - Quality metrics and analysis</li>
+                            <li>🔧 Feature Engineering - Created features details</li>
+                            <li>🤖 Model Results - Performance metrics and comparison</li>
+                            <li>🎯 Test Model - Interactive prediction interface</li>
+                        </ul>
+                    </div>
+
+                    <h4 class="mt-3">Access Dashboard</h4>
+                    <p>Open browser and navigate to: <code>http://localhost:8501</code></p>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="card mt-4">
+                <h3 class="card-header">Troubleshooting</h3>
+                <div class="card-body">
+                    <div class="notification notification-warning">
+                        <strong>Common Issues:</strong>
+                        
+                        <h4 class="mt-3">XGBoost Import Error</h4>
+                        <p><strong>Issue:</strong> XGBoost fails to load on macOS</p>
+                        <p><strong>Solution:</strong> Pipeline automatically falls back to GradientBoostingClassifier</p>
+                        
+                        <h4 class="mt-3">File Not Found</h4>
+                        <p><strong>Issue:</strong> Cannot find data files</p>
+                        <p><strong>Solution:</strong> Ensure you're in the project root directory</p>
+                        
+                        <h4 class="mt-3">Permission Denied</h4>
+                        <p><strong>Issue:</strong> Cannot write output files</p>
+                        <p><strong>Solution:</strong> Check write permissions for results/ and models/ folders</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Commands -->
+            <div class="card mt-4">
+                <h3 class="card-header">Quick Reference Commands</h3>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>python3 run_pipeline.py</code></td>
+                                <td>Run complete ML pipeline</td>
+                            </tr>
+                            <tr>
+                                <td><code>streamlit run app.py</code></td>
+                                <td>Launch interactive dashboard</td>
+                            </tr>
+                            <tr>
+                                <td><code>pip install -r requirements.txt</code></td>
+                                <td>Install dependencies</td>
+                            </tr>
+                            <tr>
+                                <td><code>python3 -m pytest</code></td>
+                                <td>Run tests (if available)</td>
+                            </tr>
+                            <tr>
+                                <td><code>open dashboard/index.html</code></td>
+                                <td>View static HTML dashboards</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="card mt-4">
+            <div class="card-body text-center">
+                <p class="text-secondary mb-2">Navigation:</p>
+                <a href="01_analysis_dashboard.html" class="btn btn-secondary">← Step 1: Data Analysis</a>
+                <a href="03_model_dashboard.html" class="btn btn-primary">Step 3: Model Performance →</a>
+                <a href="index.html" class="btn btn-secondary">Main Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
 </body>
 </html>

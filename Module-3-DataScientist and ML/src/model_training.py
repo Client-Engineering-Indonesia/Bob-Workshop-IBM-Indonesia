@@ -1,19 +1,21 @@
 """
 Model Training Module for Trade Settlement Prediction
-Trains and evaluates multiple ML models
+Trains and evaluates multiple ML models with class imbalance handling
 """
 
 import pandas as pd
 import numpy as np
 import joblib
 import json
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
     classification_report, confusion_matrix
 )
+from sklearn.utils.class_weight import compute_class_weight
+from imblearn.over_sampling import SMOTE
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -30,18 +32,35 @@ except Exception as e:
 
 
 class ModelTrainer:
-    """Train and evaluate ML models for settlement prediction"""
+    """Train and evaluate ML models for settlement prediction with SMOTE"""
     
-    def __init__(self, X, y, test_size=0.2, random_state=42):
+    def __init__(self, X, y, test_size=0.2, random_state=42, use_smote=True):
         self.X = X
         self.y = y
         self.test_size = test_size
         self.random_state = random_state
+        self.use_smote = use_smote
         
         # Split data
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
             X, y, test_size=test_size, random_state=random_state, stratify=y
         )
+        
+        # Apply SMOTE to handle class imbalance
+        if self.use_smote:
+            print("\n🔄 Applying SMOTE to balance classes...")
+            print(f"   Before SMOTE: {dict(pd.Series(self.y_train).value_counts())}")
+            smote = SMOTE(random_state=random_state)
+            self.X_train, self.y_train = smote.fit_resample(self.X_train, self.y_train)
+            print(f"   After SMOTE: {dict(pd.Series(self.y_train).value_counts())}")
+        
+        # Compute class weights for models that support it
+        self.class_weights = compute_class_weight(
+            'balanced',
+            classes=np.unique(y),
+            y=y
+        )
+        self.class_weight_dict = dict(zip(np.unique(y), self.class_weights))
         
         self.models = {}
         self.results = {}
@@ -74,11 +93,14 @@ class ModelTrainer:
         return self.results
     
     def _train_logistic_regression(self):
-        """Train Logistic Regression model"""
+        """Train Logistic Regression model with class weights"""
         print("\n🔵 Training Logistic Regression...")
         
         model = LogisticRegression(
-            max_iter=1000,
+            max_iter=2000,
+            C=1.0,
+            class_weight=self.class_weight_dict,
+            solver='lbfgs',
             random_state=self.random_state
         )
         
@@ -93,12 +115,16 @@ class ModelTrainer:
         print(f"   ✓ F1-Score: {results['f1_weighted']:.4f}")
     
     def _train_random_forest(self):
-        """Train Random Forest model"""
+        """Train Random Forest model with optimized hyperparameters"""
         print("\n🌲 Training Random Forest...")
         
         model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=10,
+            n_estimators=200,
+            max_depth=15,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            max_features='sqrt',
+            class_weight=self.class_weight_dict,
             random_state=self.random_state,
             n_jobs=-1
         )
@@ -114,13 +140,21 @@ class ModelTrainer:
         print(f"   ✓ F1-Score: {results['f1_weighted']:.4f}")
     
     def _train_xgboost(self):
-        """Train XGBoost or GradientBoosting model"""
+        """Train XGBoost or GradientBoosting model with optimized hyperparameters"""
         if XGBOOST_AVAILABLE:
             print("\n🚀 Training XGBoost...")
+            # Calculate scale_pos_weight for class imbalance
+            scale_pos_weight = len(self.y_train[self.y_train == 'MATCHED']) / len(self.y_train[self.y_train != 'MATCHED'])
+            
             model = XGBClassifier(
-                n_estimators=100,
-                max_depth=6,
-                learning_rate=0.1,
+                n_estimators=200,
+                max_depth=8,
+                learning_rate=0.05,
+                subsample=0.8,
+                colsample_bytree=0.8,
+                min_child_weight=3,
+                gamma=0.1,
+                scale_pos_weight=scale_pos_weight,
                 random_state=self.random_state,
                 n_jobs=-1,
                 eval_metric='mlogloss'
@@ -129,9 +163,13 @@ class ModelTrainer:
         else:
             print("\n🚀 Training Gradient Boosting (XGBoost alternative)...")
             model = GradientBoostingClassifier(
-                n_estimators=100,
-                max_depth=6,
-                learning_rate=0.1,
+                n_estimators=200,
+                max_depth=8,
+                learning_rate=0.05,
+                subsample=0.8,
+                min_samples_split=5,
+                min_samples_leaf=2,
+                max_features='sqrt',
                 random_state=self.random_state
             )
             model_name = 'Gradient Boosting'

@@ -106,8 +106,10 @@ class DataProcessor:
         return round(max(score, 0), 2)
     
     def clean_data(self):
-        """Clean and prepare data for modeling"""
+        """Clean and prepare data for modeling with intelligent imputation"""
         print("\n🧹 Cleaning data...")
+        
+        initial_count = len(self.df)
         
         # Convert date columns
         date_columns = ['settle_dte', 'trade_dte']
@@ -115,20 +117,52 @@ class DataProcessor:
             if col in self.df.columns:
                 self.df[col] = pd.to_datetime(self.df[col], errors='coerce')
         
-        # Handle missing values in categorical columns
-        categorical_cols = ['msg_fctn', 'trd_place', 'currency_cd', 'settle_priority', 'party_priority']
-        for col in categorical_cols:
-            if col in self.df.columns:
-                self.df[col].fillna('UNKNOWN', inplace=True)
-        
-        # Remove duplicates
-        initial_count = len(self.df)
+        # Remove duplicates FIRST to get clean data
+        before_dup = len(self.df)
         self.df.drop_duplicates(inplace=True)
-        removed = initial_count - len(self.df)
-        if removed > 0:
-            print(f"   ✓ Removed {removed} duplicate records")
+        removed_dup = before_dup - len(self.df)
+        if removed_dup > 0:
+            print(f"   ✓ Removed {removed_dup} duplicate records")
         
-        print(f"   ✓ Data cleaned: {len(self.df)} records ready for analysis")
+        # SMART IMPUTATION: Fill missing values based on patterns
+        # For party_priority (83% missing), use settle_priority as proxy
+        print(f"   • Intelligently imputing party_priority based on settle_priority...")
+        self.df['party_priority'] = self.df.apply(
+            lambda row: row['settle_priority'] if pd.isna(row['party_priority']) else row['party_priority'],
+            axis=1
+        )
+        
+        # For trd_place (5.5% missing), use most common value per currency
+        print(f"   • Imputing missing trd_place based on currency patterns...")
+        for currency in self.df['currency_cd'].unique():
+            mask = (self.df['currency_cd'] == currency) & (self.df['trd_place'].isna())
+            if mask.any():
+                mode_place = self.df[self.df['currency_cd'] == currency]['trd_place'].mode()
+                if len(mode_place) > 0:
+                    self.df.loc[mask, 'trd_place'] = mode_place[0]
+        
+        # Fill any remaining missing trd_place with overall mode
+        if self.df['trd_place'].isna().any():
+            overall_mode = self.df['trd_place'].mode()[0]
+            self.df['trd_place'].fillna(overall_mode, inplace=True)
+        
+        # Handle remaining missing values in other categorical columns
+        categorical_cols = ['msg_fctn', 'currency_cd', 'settle_priority']
+        for col in categorical_cols:
+            if col in self.df.columns and self.df[col].isnull().any():
+                mode_value = self.df[col].mode()[0] if len(self.df[col].mode()) > 0 else 'MEDIUM'
+                self.df[col].fillna(mode_value, inplace=True)
+                print(f"   • Filled missing {col} with mode: {mode_value}")
+        
+        # Fill missing deal_price with median
+        if 'deal_price' in self.df.columns and self.df['deal_price'].isnull().any():
+            median_price = self.df['deal_price'].median()
+            self.df['deal_price'].fillna(median_price, inplace=True)
+            print(f"   • Filled missing deal_price with median: {median_price:.2f}")
+        
+        total_removed = initial_count - len(self.df)
+        print(f"\n   ✓ Data cleaned: {len(self.df)} records ready ({total_removed} removed)")
+        print(f"   ✓ All missing values intelligently imputed!")
         
         return self.df
     

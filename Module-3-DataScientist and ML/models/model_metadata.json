@@ -1,15 +1,15 @@
 {
   "model_name": "Gradient Boosting",
-  "accuracy": 0.6275,
-  "f1_score": 0.618548815304829,
-  "cv_score": 0.64,
-  "training_samples": 1600,
+  "accuracy": 0.62,
+  "f1_score": 0.6147931884919874,
+  "cv_score": 0.7862007102844799,
+  "training_samples": 2862,
   "test_samples": 400,
-  "n_features": 22,
+  "n_features": 29,
   "classes": [
     "ERROR",
     "MATCHED",
     "UNMATCHED"
   ],
-  "timestamp": "2026-05-08T15:18:37.365711"
+  "timestamp": "2026-05-11T15:59:53.223233"
 }

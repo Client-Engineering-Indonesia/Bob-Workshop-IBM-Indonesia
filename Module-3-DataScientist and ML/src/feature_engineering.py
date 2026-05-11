@@ -133,13 +133,14 @@ class FeatureEngineer:
         }
     
     def _create_risk_features(self):
-        """Create risk indicator features"""
+        """Create comprehensive risk indicator features"""
         print("   • Risk indicator features...")
         
         # Venue risk score (based on historical failure rates)
         venue_risk = {
             'EXCH': 1,  # Exchange - lowest risk
             'SECM': 2,  # Securities Market - medium risk
+            'PRIM': 2,  # Primary market - medium risk
             'OTCO': 3,  # Over-the-counter - higher risk
             'UNKNOWN': 4  # Unknown - highest risk
         }
@@ -152,17 +153,52 @@ class FeatureEngineer:
         # Priority risk (LOW priority = higher risk)
         self.df['priority_risk'] = (self.df['settle_priority'] == 'LOW').astype(int)
         
+        # Party priority risk
+        self.df['party_priority_risk'] = (self.df['party_priority'] == 'LOW').astype(int)
+        
+        # Combined priority score (both low = highest risk)
+        self.df['combined_priority_risk'] = (
+            (self.df['settle_priority'] == 'LOW') &
+            (self.df['party_priority'] == 'LOW')
+        ).astype(int)
+        
         # Complex trade indicator
         self.df['is_complex_trade'] = (
-            (self.df['venue_risk_score'] >= 3) & 
+            (self.df['venue_risk_score'] >= 3) &
             (self.df['is_major_currency'] == 0)
         ).astype(int)
+        
+        # High risk combination: OTC + non-major currency + low priority
+        self.df['is_high_risk_combo'] = (
+            (self.df['trd_place'] == 'OTCO') &
+            (self.df['is_major_currency'] == 0) &
+            (self.df['settle_priority'] == 'LOW')
+        ).astype(int)
+        
+        # Message function risk (PREADVICE is safer)
+        self.df['msg_fctn_risk'] = (self.df['msg_fctn'] != 'PREADVICE').astype(int)
+        
+        # Weekend settlement risk
+        self.df['weekend_settlement_risk'] = (self.df['settle_day_of_week'] >= 5).astype(int)
+        
+        # Urgent settlement (same day or next day)
+        self.df['is_urgent_settlement'] = (self.df['days_to_settle'] <= 1).astype(int)
+        
+        # Delayed settlement (more than 5 days)
+        self.df['is_delayed_settlement'] = (self.df['days_to_settle'] > 5).astype(int)
         
         self.feature_info['risk_features'] = {
             'venue_risk_score': 'Risk score based on trading venue (1-4)',
             'is_major_currency': 'Whether currency is major (USD/EUR/GBP/JPY)',
-            'priority_risk': 'Risk indicator for low priority trades',
-            'is_complex_trade': 'Indicator for complex/risky trade combinations'
+            'priority_risk': 'Risk indicator for low settle priority',
+            'party_priority_risk': 'Risk indicator for low party priority',
+            'combined_priority_risk': 'Both priorities are LOW',
+            'is_complex_trade': 'Indicator for complex/risky trade combinations',
+            'is_high_risk_combo': 'OTC + non-major + low priority',
+            'msg_fctn_risk': 'Message function is not PREADVICE',
+            'weekend_settlement_risk': 'Settlement on weekend',
+            'is_urgent_settlement': 'Settlement within 1 day',
+            'is_delayed_settlement': 'Settlement after 5+ days'
         }
     
     def prepare_for_modeling(self):
