@@ -168,6 +168,7 @@ Module 4 - DataScientist and ML/
 │   ├── js/main.js
 │   └── data/results.json
 ├── app.py                                 # Local version only
+├── run_pipeline.py   #To test whether all files is run smoothly before deployment to streamlit
 ├── requirements.txt
 └── README.md
 ```
