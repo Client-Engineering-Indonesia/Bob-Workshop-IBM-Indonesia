@@ -1,0 +1,39 @@
+/* Trade Settlement Prediction Dashboard Styles */
+body {
+    font-family: 'IBM Plex Sans', Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #0f62fe;
+    border-bottom: 3px solid #0f62fe;
+    padding-bottom: 10px;
+}
+
+code {
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+a {
+    color: #0f62fe;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

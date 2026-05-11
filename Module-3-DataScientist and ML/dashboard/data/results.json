@@ -1,0 +1,5 @@
+{
+  "message": "This is a placeholder. Run the ML pipeline to generate actual results.",
+  "pipeline_status": "not_run",
+  "recommendation": "Execute: python run_pipeline.py"
+}
