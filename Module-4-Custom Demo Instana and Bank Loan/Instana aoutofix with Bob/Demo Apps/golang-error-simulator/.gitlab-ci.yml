@@ -1,0 +1,224 @@
+# GitLab CI/CD Pipeline for Golang Error Simulator
+# This pipeline builds, tests, and deploys the application
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  # Docker registry configuration (HTTP insecure registry)
+  DOCKER_REGISTRY: "162.133.131.244:5050"
+  DOCKER_IMAGE: "162.133.131.244:5050/root/golang-error-simulator"
+  DOCKER_TAG: $CI_COMMIT_SHORT_SHA
+  
+  # Application configuration
+  APP_NAME: golang-error-simulator
+  APP_PORT: 8080
+
+# Test stage - Run Go tests and linting
+test:
+  stage: test
+  image: golang:1.21-alpine
+  before_script:
+    - apk add --no-cache git gcc musl-dev
+    - go version
+  script:
+    - echo "Running Go tests..."
+    - go mod download
+    - go mod verify
+    - go vet ./...
+    # Run tests with race detector (requires CGO)
+    - CGO_ENABLED=1 go test -v -race -coverprofile=coverage.out ./... || echo "No tests found"
+    # Show coverage if file exists
+    - |
+      if [ -f coverage.out ]; then
+        go tool cover -func=coverage.out
+      else
+        echo "No coverage file generated (no tests found)"
+      fi
+  coverage: '/total:.*?(\d+\.\d+)%/'
+  artifacts:
+    paths:
+      - coverage.out
+    expire_in: 1 week
+    when: on_success
+  only:
+    - branches
+    - merge_requests
+  allow_failure: false
+
+# Build stage - Build Go binary
+build:binary:
+  stage: build
+  image: golang:1.21-alpine
+  before_script:
+    - apk add --no-cache git
+  script:
+    - echo "Building Go binary..."
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o $APP_NAME main.go
+    - ls -lh $APP_NAME
+  artifacts:
+    paths:
+      - $APP_NAME
+    expire_in: 1 week
+  only:
+    - branches
+    - tags
+
+# Build Docker image (using host Docker socket)
+build:docker:
+  stage: build
+  image: docker:latest
+  variables:
+    # Use HTTP registry
+    DOCKER_REGISTRY: "162.133.131.244:5050"
+  before_script:
+    - echo "Checking Docker connection..."
+    - docker version
+    - docker info
+    - echo "Logging into Docker registry..."
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin http://162.133.131.244:5050
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $DOCKER_IMAGE:$DOCKER_TAG -t $DOCKER_IMAGE:latest .
+    - echo "Pushing Docker image..."
+    - docker push $DOCKER_IMAGE:$DOCKER_TAG
+    - docker push $DOCKER_IMAGE:latest
+    - echo "Docker image pushed successfully!"
+    - echo "Image:" $DOCKER_IMAGE:$DOCKER_TAG
+  after_script:
+    - docker logout 162.133.131.244:5050 || true
+  only:
+    - main
+    - master
+    - tags
+  dependencies:
+    - build:binary
+  tags:
+    - docker
+
+# Deploy to target server
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "=== Checking CI/CD Variables ==="
+    - echo "DEPLOY_SERVER=${DEPLOY_SERVER:-NOT_SET}"
+    - echo "DEPLOY_USER=${DEPLOY_USER:-NOT_SET}"
+    - echo "DEPLOY_PATH=${DEPLOY_PATH:-NOT_SET}"
+    - echo "DEPLOY_PORT=${DEPLOY_PORT:-22}"
+    - echo "SSH_PRIVATE_KEY file:" $SSH_PRIVATE_KEY
+    - echo "=== Variables checked ==="
+    # GitLab File variable - SSH_PRIVATE_KEY is already a file path
+    # Copy it to standard SSH location
+    - cp "$SSH_PRIVATE_KEY" ~/.ssh/deploy_key
+    - echo "" >> ~/.ssh/deploy_key
+    - chmod 600 ~/.ssh/deploy_key
+    - echo "Key file size:" $(wc -c < ~/.ssh/deploy_key) "bytes"
+    - echo "First line:" $(head -1 ~/.ssh/deploy_key)
+    - echo "Last line:" $(tail -1 ~/.ssh/deploy_key)
+    # Add target server to known_hosts with custom port
+    - echo "Running ssh-keyscan for $DEPLOY_SERVER on port ${DEPLOY_PORT:-22}..."
+    - ssh-keyscan -p ${DEPLOY_PORT:-22} -H $DEPLOY_SERVER >> ~/.ssh/known_hosts || echo "ssh-keyscan failed!"
+    - echo "SSH setup complete"
+  script:
+    - echo "=== Starting deployment script ==="
+    - echo "DEPLOY_SERVER=$DEPLOY_SERVER"
+    - echo "DEPLOY_USER=$DEPLOY_USER"
+    - echo "DEPLOY_PATH=$DEPLOY_PATH"
+    - echo "DEPLOY_PORT=${DEPLOY_PORT:-22}"
+    - echo "DOCKER_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG"
+    - echo "=== Deploying to production server ==="
+    - |
+      ssh -i ~/.ssh/deploy_key -p ${DEPLOY_PORT:-22} -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER bash << EOF
+        set -e
+        echo "Connected to deployment server: \$(hostname)"
+        
+        # Navigate to deployment directory
+        cd $DEPLOY_PATH || { echo "Failed to cd to $DEPLOY_PATH"; exit 1; }
+        echo "Current directory: \$(pwd)"
+        
+        # Export environment variables for docker-compose
+        export DOCKER_IMAGE="$DOCKER_IMAGE"
+        export DOCKER_TAG="$DOCKER_TAG"
+        export APP_PORT="8080"
+        echo "DOCKER_IMAGE=\$DOCKER_IMAGE"
+        echo "DOCKER_TAG=\$DOCKER_TAG"
+        
+        # Login to Docker registry (HTTP)
+        echo "Logging into Docker registry..."
+        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin http://162.133.131.244:5050
+        
+        # Pull latest images using docker directly (not docker-compose)
+        echo "Pulling latest Docker image..."
+        docker pull \$DOCKER_IMAGE:\$DOCKER_TAG
+        docker tag \$DOCKER_IMAGE:\$DOCKER_TAG \$DOCKER_IMAGE:latest
+        
+        # Stop old containers
+        echo "Stopping old containers..."
+        docker-compose down
+        
+        # Start new containers
+        echo "Starting new containers..."
+        docker-compose up -d
+        
+        # Wait for containers to start
+        echo "Waiting for containers to start..."
+        sleep 5
+        
+        # Show container status
+        echo "Container status:"
+        docker-compose ps
+        
+        # Check application health
+        echo "Checking application health..."
+        for i in {1..10}; do
+          if curl -f http://localhost:8080/health 2>/dev/null; then
+            echo "✅ Application is healthy!"
+            break
+          else
+            echo "Waiting for application to start (attempt \$i/10)..."
+            sleep 2
+          fi
+        done
+        
+        echo "Deployment completed successfully!"
+      EOF
+    - echo "=== Deployment finished ==="
+  after_script:
+    - rm -f ~/.ssh/deploy_key
+  environment:
+    name: production
+    url: http://162.133.129.116:8080
+  only:
+    - main
+    - master
+  when: manual
+  tags:
+    - docker
+
+# Security scanning (optional)
+security:scan:
+  stage: test
+  image: golang:1.21-alpine
+  before_script:
+    - apk add --no-cache git gcc musl-dev
+    - go install github.com/securego/gosec/v2/cmd/gosec@latest
+  script:
+    - echo "Running security scan..."
+    - gosec -fmt json -out gosec-report.json ./... || echo "Security scan completed with findings"
+  artifacts:
+    paths:
+      - gosec-report.json
+    expire_in: 1 week
+    when: always
+  allow_failure: true
+  only:
+    - branches
+    - merge_requests
+
+

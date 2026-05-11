@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Nusantara - Sistem Pinjaman Online</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-university"></i>
+                <span>Bank Nusantara</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="active">Beranda</a></li>
+                <li><a href="#products">Produk</a></li>
+                <li><a href="#calculator">Kalkulator</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-login" onclick="showLogin()">Masuk</button>
+                <button class="btn-register" onclick="showRegister()">Daftar</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Wujudkan Impian Anda Bersama Kami</h1>
+                <p class="hero-subtitle">Dapatkan pinjaman dengan bunga rendah dan proses cepat hanya dalam 24 jam</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>5.2%</h3>
+                        <p>Bunga Terendah</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24 Jam</h3>
+                        <p>Proses Persetujuan</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>500M+</h3>
+                        <p>Dana Tersalurkan</p>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="scrollToCalculator()">
+                    <i class="fas fa-calculator"></i> Hitung Pinjaman Anda
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Produk Pinjaman Kami</h2>
+            <p class="section-subtitle">Pilih produk yang sesuai dengan kebutuhan Anda</p>
+            
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Kredit Pemilikan Rumah</h3>
+                    <p class="product-rate">Bunga mulai dari <strong>5.2%</strong></p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Tenor hingga 20 tahun</li>
+                        <li><i class="fas fa-check"></i> DP mulai 10%</li>
+                        <li><i class="fas fa-check"></i> Proses cepat & mudah</li>
+                        <li><i class="fas fa-check"></i> Tanpa biaya provisi</li>
+                    </ul>
+                    <button class="btn-apply" onclick="applyLoan('KPR')">Ajukan Sekarang</button>
+                </div>
+
+                <div class="product-card featured">
+                    <div class="badge">Paling Populer</div>
+                    <div class="product-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Kredit Kendaraan</h3>
+                    <p class="product-rate">Bunga mulai dari <strong>6.5%</strong></p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Tenor hingga 5 tahun</li>
+                        <li><i class="fas fa-check"></i> DP mulai 20%</li>
+                        <li><i class="fas fa-check"></i> Asuransi komprehensif</li>
+                        <li><i class="fas fa-check"></i> Proses 1 hari</li>
+                    </ul>
+                    <button class="btn-apply" onclick="applyLoan('Kendaraan')">Ajukan Sekarang</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>Pinjaman Usaha</h3>
+                    <p class="product-rate">Bunga mulai dari <strong>7.8%</strong></p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Plafon hingga 5M</li>
+                        <li><i class="fas fa-check"></i> Tenor fleksibel</li>
+                        <li><i class="fas fa-check"></i> Tanpa agunan</li>
+                        <li><i class="fas fa-check"></i> Konsultasi gratis</li>
+                    </ul>
+                    <button class="btn-apply" onclick="applyLoan('Usaha')">Ajukan Sekarang</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Pinjaman Pendidikan</h3>
+                    <p class="product-rate">Bunga mulai dari <strong>5.5%</strong></p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Tenor hingga 10 tahun</li>
+                        <li><i class="fas fa-check"></i> Grace period tersedia</li>
+                        <li><i class="fas fa-check"></i> Tanpa DP</li>
+                        <li><i class="fas fa-check"></i> Untuk semua jenjang</li>
+                    </ul>
+                    <button class="btn-apply" onclick="applyLoan('Pendidikan')">Ajukan Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="calculator" id="calculator">
+        <div class="container">
+            <h2 class="section-title">Kalkulator Pinjaman</h2>
+            <p class="section-subtitle">Hitung estimasi cicilan bulanan Anda</p>
+            
+            <div class="calculator-wrapper">
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label>Jenis Pinjaman</label>
+                        <select id="loanType" onchange="updateInterestRate()">
+                            <option value="5.2">Kredit Pemilikan Rumah (5.2%)</option>
+                            <option value="6.5">Kredit Kendaraan (6.5%)</option>
+                            <option value="7.8">Pinjaman Usaha (7.8%)</option>
+                            <option value="5.5">Pinjaman Pendidikan (5.5%)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jumlah Pinjaman</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">Rp</span>
+                            <input type="text" id="loanAmount" value="100000000" oninput="formatCurrency(this); calculateLoan()">
+                        </div>
+                        <input type="range" id="loanAmountSlider" min="10000000" max="1000000000" step="1000000" value="100000000" oninput="updateLoanAmount(this.value)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jangka Waktu (Bulan)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="loanTenor" value="12" min="6" max="240" oninput="calculateLoan()">
+                            <span class="input-suffix">Bulan</span>
+                        </div>
+                        <input type="range" id="tenorSlider" min="6" max="240" value="12" oninput="updateTenor(this.value)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Suku Bunga per Tahun</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="interestRate" value="5.2" step="0.1" min="0" max="30" oninput="calculateLoan()">
+                            <span class="input-suffix">%</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-calculate" onclick="calculateLoan()">
+                        <i class="fas fa-calculator"></i> Hitung Cicilan
+                    </button>
+                </div>
+
+                <div class="calculator-result">
+                    <h3>Hasil Perhitungan</h3>
+                    <div class="result-item">
+                        <span>Cicilan per Bulan</span>
+                        <strong id="monthlyPayment">Rp 0</strong>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Bunga</span>
+                        <strong id="totalInterest">Rp 0</strong>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Pembayaran</span>
+                        <strong id="totalPayment">Rp 0</strong>
+                    </div>
+                    <div class="result-chart">
+                        <canvas id="loanChart"></canvas>
+                    </div>
+                    <button class="btn-apply-calc" onclick="applyFromCalculator()">
+                        <i class="fas fa-paper-plane"></i> Ajukan Pinjaman Ini
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Modal -->
+    <div id="applicationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Formulir Pengajuan Pinjaman</h2>
+            <form id="loanApplicationForm" onsubmit="submitApplication(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nama Lengkap *</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>NIK *</label>
+                        <input type="text" id="nik" maxlength="16" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telepon *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Alamat Lengkap *</label>
+                    <textarea id="address" rows="3" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pekerjaan *</label>
+                        <input type="text" id="occupation" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Penghasilan per Bulan *</label>
+                        <input type="text" id="income" oninput="formatCurrency(this)" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Jenis Pinjaman *</label>
+                        <select id="applicationLoanType" required>
+                            <option value="">Pilih Jenis Pinjaman</option>
+                            <option value="KPR">Kredit Pemilikan Rumah</option>
+                            <option value="Kendaraan">Kredit Kendaraan</option>
+                            <option value="Usaha">Pinjaman Usaha</option>
+                            <option value="Pendidikan">Pinjaman Pendidikan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Pinjaman *</label>
+                        <input type="text" id="applicationAmount" oninput="formatCurrency(this)" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tujuan Pinjaman *</label>
+                    <textarea id="loanPurpose" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">Saya menyetujui syarat dan ketentuan yang berlaku</label>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i> Kirim Pengajuan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content modal-small">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Masuk ke Akun Anda</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email atau Username</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Ingat saya</label>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+                <p class="form-footer">
+                    Belum punya akun? <a href="#" onclick="showRegister()">Daftar sekarang</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content modal-small">
+            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <h2>Daftar Akun Baru</h2>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Konfirmasi Password</label>
+                    <input type="password" id="registerConfirmPassword" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="agreeTerms" required>
+                    <label for="agreeTerms">Saya setuju dengan syarat dan ketentuan</label>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i> Daftar
+                </button>
+                <p class="form-footer">
+                    Sudah punya akun? <a href="#" onclick="showLogin()">Masuk di sini</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-university"></i> Bank Nusantara</h3>
+                    <p>Solusi keuangan terpercaya untuk masa depan yang lebih baik.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Produk</h4>
+                    <ul>
+                        <li><a href="#">Kredit Pemilikan Rumah</a></li>
+                        <li><a href="#">Kredit Kendaraan</a></li>
+                        <li><a href="#">Pinjaman Usaha</a></li>
+                        <li><a href="#">Pinjaman Pendidikan</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Perusahaan</h4>
+                    <ul>
+                        <li><a href="#">Tentang Kami</a></li>
+                        <li><a href="#">Karir</a></li>
+                        <li><a href="#">Berita</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontak</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 1500-888</li>
+                        <li><i class="fas fa-envelope"></i> info@banknusantara.co.id</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bank Nusantara. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
