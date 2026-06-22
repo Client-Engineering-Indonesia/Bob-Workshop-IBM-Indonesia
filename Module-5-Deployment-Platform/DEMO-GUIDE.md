@@ -9,93 +9,75 @@ graph TB
         B[Web UI<br/>Flask + SocketIO]
     end
     
-    subgraph "Bob Platform"
-        C[Bob Orchestrator<br/>Flask API]
-        D[Jenkins Pipeline]
-    end
-    
     subgraph "OpenShift Cluster"
-        E[Production Namespace]
-        F[Development Namespace]
-        G[Service Accounts<br/>& RBAC]
+        C[Production Namespace]
+        D[Development Namespace]
+        E[Service Accounts<br/>& RBAC]
     end
     
     subgraph "Deployed Applications"
-        H[Sample Flask App]
-        I[Custom Applications]
+        F[Sample Flask Apps]
+        G[Custom Applications]
     end
     
-    A -->|1. Upload Code| B
-    A -->|2. Webhook/API| C
-    B -->|Deploy Request| C
-    C -->|3. Trigger Build| D
-    D -->|4. Create Resources| E
-    D -->|4. Create Resources| F
-    E -->|Deploy| H
-    E -->|Deploy| I
-    F -->|Deploy| H
-    F -->|Deploy| I
-    G -.->|Permissions| D
-    G -.->|Permissions| C
+    A -->|1. Upload Python Code| B
+    B -->|2. Analyze Dependencies| B
+    B -->|3. Generate Manifests| B
+    B -->|4. Deploy to OpenShift| C
+    B -->|4. Deploy to OpenShift| D
+    C -->|5. Run Application| F
+    C -->|5. Run Application| G
+    D -->|5. Run Application| F
+    D -->|5. Run Application| G
+    E -.->|Permissions| B
     
     style A fill:#667eea,color:#fff
     style B fill:#48bb78,color:#fff
-    style C fill:#ed8936,color:#fff
-    style D fill:#f56565,color:#fff
-    style E fill:#4299e1,color:#fff
-    style F fill:#4299e1,color:#fff
-    style H fill:#9f7aea,color:#fff
-    style I fill:#9f7aea,color:#fff
+    style C fill:#4299e1,color:#fff
+    style D fill:#4299e1,color:#fff
+    style E fill:#ed8936,color:#fff
+    style F fill:#9f7aea,color:#fff
+    style G fill:#9f7aea,color:#fff
 ```
 
 ## Project Structure
 
 ```
 Module-5-Deployment-Platform/
-├── 📄 README.md                          # This file - Workshop guide
+├── 📄 DEMO-GUIDE.md                      # This file - Workshop guide
 ├── 📄 credentials.yaml.example           # Template for cluster credentials
-├── 🔧 install-oc-cli.sh                  # macOS OpenShift CLI installer
-├── 🔧 install-oc-cli-linux.sh            # Linux OpenShift CLI installer
-│
-├── 📂 bob/                               # Bob Orchestrator - Core deployment engine
-│   ├── orchestrator.py                   # Main Flask API for deployments
-│   ├── jenkins.py                        # Jenkins pipeline integration
-│   └── k8s/                              # Bob's Kubernetes manifests
-│       ├── deployment.yaml               # Bob orchestrator deployment
-│       ├── service.yaml                  # Bob service definition
-│       └── route.yaml                    # Bob external route
-│
-├── 📂 web-ui/                            # Web UI - Visual deployment interface
-│   ├── app.py                            # Flask backend with SocketIO
-│   ├── k8s/                              # Web UI Kubernetes manifests
-│   │   ├── deployment-simple.yaml        # Web UI deployment
-│   │   ├── service.yaml                  # Web UI service
-│   │   └── route.yaml                    # Web UI external route
-│   ├── static/                           # Frontend assets
-│   │   ├── css/
-│   │   │   └── style.css                 # UI styling
-│   │   └── js/
-│   │       ├── app.js                    # Main JavaScript
-│   │       └── deploy.js                 # Deployment logic
-│   └── templates/                        # HTML templates
-│       ├── index.html                    # Main deployment page
-│       └── status.html                   # Deployment status page
 │
 ├── 📂 k8s/                               # Infrastructure Kubernetes manifests
 │   ├── 00-namespaces.yaml                # Production & Development namespaces
 │   ├── 01-serviceaccount-rbac.yaml       # Service accounts & permissions
 │   └── 02-secret.yaml.example            # Secret template for tokens
 │
-├── 📂 sample-app/                        # Sample Flask application
+├── 📂 sample-app/                        # Sample Flask applications
 │   ├── app.py                            # Simple Flask web app
-│   ├── Dockerfile                        # Container image definition
-│   ├── requirements.txt                  # Python dependencies
-│   └── README.md                         # Sample app documentation
+│   └── system-dashboard.py               # System monitoring dashboard
 │
-└── 📂 docs/                              # Workshop documentation
-    ├── QUICKSTART.md                     # Quick start guide
-    ├── cheatsheet.md                     # Command reference
-    └──  troubleshooting.md                # Common issues & solutions
+└── 📂 web-ui/                            # Web UI - Visual deployment interface
+    ├── app.py                            # Flask backend with SocketIO
+    ├── deployment-templates/             # Deployment template files
+    │   ├── buildconfig.yaml.template     # BuildConfig template
+    │   ├── deployment.yaml.template      # Deployment template
+    │   ├── Dockerfile.template           # Dockerfile template
+    │   ├── Jenkinsfile.template          # Jenkins pipeline template
+    │   ├── route.yaml.template           # Route template
+    │   └── service.yaml.template         # Service template
+    ├── k8s/                              # Web UI Kubernetes manifests
+    │   ├── deployment-simple.yaml        # Web UI deployment
+    │   ├── service.yaml                  # Web UI service
+    │   └── route.yaml                    # Web UI external route
+    ├── static/                           # Frontend assets
+    │   ├── css/
+    │   │   └── style.css                 # UI styling
+    │   └── js/
+    │       ├── app.js                    # Main JavaScript
+    │       └── deploy.js                 # Deployment logic
+    └── templates/                        # HTML templates
+        ├── index.html                    # Main deployment page
+        └── status.html                   # Deployment status page
 ```
 
 ## Deployment Flow
@@ -104,44 +86,36 @@ Module-5-Deployment-Platform/
 sequenceDiagram
     participant D as Developer
     participant UI as Web UI
-    participant B as Bob Orchestrator
-    participant J as Jenkins
     participant OS as OpenShift
     participant A as Application
 
     D->>UI:  1. Upload app.py
-    UI->>UI: 2. Generate manifests
-    UI->>B:  3. POST /deploy
-    B->>J:   4. Trigger pipeline
-    J->>OS:  5. Create deployment
-    J->>OS:  6. Create service
-    J->>OS:  7. Create route
+    UI->>UI: 2. Analyze dependencies
+    UI->>UI: 3. Generate Dockerfile
+    UI->>UI: 4. Generate K8s manifests
+    UI->>OS: 5. Create deployment
+    UI->>OS: 6. Create service
+    UI->>OS: 7. Create route
     OS->>A:  8. Start pods
-    A->>OS:  9. Health check
-    OS->>J:  10. Deployment status
-    J->>B:   11. Pipeline complete
-    B->>UI:  12. Success response
-    UI->>D:  13. Show deployment URL
+    A->>OS:  9. Health check OK
+    OS->>UI: 10. Deployment status
+    UI->>D:  11. Show deployment URL
 ```
 
 ## Documentation
 
-All detailed documentation has been organized in the `docs/` folder:
-
-- **[QUICKSTART.md](docs/QUICKSTART.md)** - Get started in 15 minutes
-- **[cheatsheet.md](docs/cheatsheet.md)** - Command reference and shortcuts
-- **[troubleshooting.md](docs/troubleshooting.md)** - Common issues and solutions
+This guide contains all the information needed to deploy and use the Bob Deployment Platform. For additional resources, see the Additional Resources section at the end of this document.
 
 ## Workshop Overview
 
-This workshop teaches you how to deploy Python applications to OpenShift using the Bob Deployment Platform - an automated deployment orchestrator that simplifies the entire deployment process.
+This workshop teaches you how to deploy Python applications to OpenShift using a Web UI that automates the deployment process by analyzing your code, generating deployment manifests, and deploying directly to OpenShift.
 
 **What You'll Learn:**
 - Deploy Python applications to OpenShift
-- Use Bob Orchestrator for automated deployments
-- Configure Jenkins pipelines
+- Use the Web UI for automated deployments
+- Understand automatic dependency detection
 - Manage Kubernetes resources
-- Use the Web UI for visual deployments
+- Monitor deployment status in real-time
 
 **Prerequisites:**
 - Basic Python knowledge
@@ -160,19 +134,18 @@ This workshop teaches you how to deploy Python applications to OpenShift using t
 - Create namespaces
 - Configure service accounts
 - Set up RBAC permissions
-- Deploy Jenkins
-
-### Part 3: Bob Orchestrator
-- Deploy Bob Orchestrator
 - Configure secrets
-- Test webhook endpoints
-- Trigger deployments
 
-### Part 4: Web UI
+### Part 3: Web UI Deployment
 - Deploy Web UI
-- Use visual interface
-- Monitor deployments
-- Troubleshoot issues
+- Access the interface
+- Understand the deployment templates
+
+### Part 4: Application Deployment
+- Use Web UI to deploy applications
+- Upload Python code
+- Monitor deployment progress
+- Access deployed applications
 
 ### Part 5: Hands-on Practice
 - Deploy sample applications
@@ -183,22 +156,17 @@ This workshop teaches you how to deploy Python applications to OpenShift using t
 
 ### Step 1: Install OpenShift CLI
 
-**macOS:**
-```bash
-cd Module-5-Deployment-Platform/
-chmod +x install-oc-cli.sh
-./install-oc-cli.sh
-```
+Download and install the OpenShift CLI (`oc`) for your platform:
 
-**Linux:**
-```bash
-cd Module-5-Deployment-Platform/
-chmod +x install-oc-cli-linux.sh
-./install-oc-cli-linux.sh
-```
+**Download from:** https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/
 
-**Windows:**
-Download from: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/
+- **macOS/Linux:** Extract and move to `/usr/local/bin/`
+- **Windows:** Extract and add to PATH
+
+Verify installation:
+```bash
+oc version
+```
 
 ### Step 2: Configure Credentials
 
@@ -255,23 +223,7 @@ nano k8s/02-secret.yaml
 oc apply -f k8s/02-secret.yaml
 ```
 
-### Step 6: Deploy Bob Orchestrator
-
-```bash
-# Create ConfigMaps
-oc create configmap bob-orchestrator-code \
-  --from-file=orchestrator.py=bob/orchestrator.py \
-  --from-file=jenkins.py=bob/jenkins.py \
-  -n production
-
-# Deploy Bob
-oc apply -f bob/k8s/
-
-# Verify
-oc get pods -n production | grep bob
-```
-
-### Step 7: Deploy Web UI
+### Step 6: Deploy Web UI
 
 ```bash
 # Create ConfigMaps
@@ -301,29 +253,28 @@ oc get route bob-web-ui -n production
 
 ## Workshop Exercises
 
-### Exercise 1: Deploy Sample Application
+### Exercise 1: Deploy Sample Application via Web UI
 
-Deploy the provided sample Flask application:
-
-```bash
-cd sample-app/
-
-# Review the application
-cat app.py
-
-# Deploy using Bob webhook
-curl -X POST <BOB_WEBHOOK_URL> \
-  -H "Content-Type: application/json" \
-  -d '{"text":"/deploy production"}'
-```
-
-### Exercise 2: Use Web UI
-
-1. Open Web UI in browser
-2. Fill in application details
+1. Open Web UI in browser (get URL from `oc get route bob-web-ui -n production`)
+2. Fill in application details:
+   - **App Name:** my-flask-app
+   - **Namespace:** production
+   - **Port:** 5000
 3. Upload `sample-app/app.py`
 4. Click "Deploy Application"
-5. Monitor deployment progress
+5. Monitor deployment progress in real-time
+6. Access your deployed application via the provided route
+
+### Exercise 2: Deploy System Dashboard
+
+1. Open Web UI in browser
+2. Fill in application details:
+   - **App Name:** system-dashboard
+   - **Namespace:** development
+   - **Port:** 8080
+3. Upload `sample-app/system-dashboard.py`
+4. Click "Deploy Application"
+5. Monitor deployment and access the dashboard
 
 ## Useful Commands
 
@@ -379,10 +330,6 @@ oc delete namespace production
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
 - [Flask Documentation](https://flask.palletsprojects.com/)
 
-### Cheat Sheets
-- See `docs/cheatsheet.md` for quick reference
-- See `docs/troubleshooting.md` for common issues
-
 ### Sample Applications
-- `sample-app/` - Basic Flask application
-- `sample-app-advanced/` - Advanced Flask with database
+- `sample-app/app.py` - Basic Flask web application
+- `sample-app/system-dashboard.py` - System monitoring dashboard application
