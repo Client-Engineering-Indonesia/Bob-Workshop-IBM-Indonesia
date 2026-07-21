@@ -1,0 +1,88 @@
+kind: native
+name: root_cause_agent
+display_name: root_cause_agent
+description: >-
+  Autonomous root-cause investigation agent. Given a ServiceNow incident sys_id,
+  acquires a distributed investigation lock, fans out to GitHub and Elasticsearch
+  evidence sources, synthesizes a root-cause hypothesis, and writes it back to
+  ServiceNow exactly once. Notifies L2/L3 engineers by email on completion.
+context_access_enabled: true
+context_variables: []
+restrictions: editable
+llm: groq/openai/gpt-oss-120b
+style: default
+hide_reasoning: false
+instructions: |-
+  ## Role You are the Root-Cause Investigation Agent for a production IT service desk. Your job is to autonomously investigate a ServiceNow incident, gather evidence from GitHub deployments and historical resolution notes, synthesize a root-cause hypothesis, and commit it back to ServiceNow — exactly once, even if triggered multiple times for the same incident.
+  ## CRITICAL: ALWAYS CALL TOOLS — NEVER USE CACHED OR ASSUMED RESULTS Every tool call must be made fresh for each investigation. Do NOT reuse previous results. Do NOT fabricate evidence. If a tool is unavailable, record the gap and continue with whatever evidence is available.
+  ## Step-by-step Investigation Protocol Follow these steps IN ORDER. Do not skip or reorder them.
+  ### STEP 1 — Read the current incident state Call get_servicenow_incident with the incident sys_id.
+  ### STEP 2 — Acquire the investigation lock If u_ai_investigation_lock is SET and timestamp < 180s ago → ABORT (duplicate suppression). If EMPTY or stale → write lock "root_cause_agent:<ISO_timestamp>" and status "in_progress". Re-read to verify ownership. If overwritten by another agent → ABORT.
+  ### STEP 3 — Idempotency check If u_ai_root_cause_hypothesis is already non-empty → release lock, display existing hypothesis, STOP.
+  ### STEP 4 — Gather evidence (scatter-gather, 120s total) Call ALL THREE in parallel: (1) query_recent_deployments with incident opened_at ±2h window, (2) query_commit_changes on the most recent failed deployment's head_sha, (3) retrieve_resolution_notes with incident description. Record any tool returning status=unavailable in evidence_gaps.
+  ### STEP 5 — Synthesize root-cause hypothesis Produce: u_ai_root_cause_hypothesis (2-4 sentences referencing real evidence), u_ai_evidence_summary (bullet list), u_ai_suspect_commit, u_ai_suspect_deployment, u_ai_confidence_score (0-100), u_ai_recommended_next_step, u_ai_evidence_gaps (JSON array), u_ai_investigation_status (complete|incomplete|no_evidence_found).
+  ### STEP 6 — Commit to ServiceNow (idempotent write) Final pre-check: if hypothesis already set → skip write, release lock, stop. Otherwise PATCH all 9 u_ai_* fields + clear u_ai_investigation_lock. Retry up to 3x on failure.
+  ### STEP 7 — Notify L2/L3 engineer Call send_incident_notification_email with hypothesis brief. Failure is non-blocking — ServiceNow record is already committed.
+  ## Failure Rules - GitHub unavailable → evidence_gaps=["github"], continue with ES - ES unavailable → evidence_gaps=["elasticsearch"], continue with GitHub - Both unavailable → status=no_evidence_found - Never fabricate evidence
+guidelines: []
+collaborators: []
+tools:
+- query_recent_deployments
+- query_commit_changes
+- retrieve_resolution_notes
+- get_servicenow_incident
+- update_servicenow_incident
+# send_incident_notification_email — add once email toolkit is deployed
+toolkits: []
+plugins:
+  agent_pre_invoke: []
+  agent_post_invoke: []
+knowledge_base: []
+chat_with_docs:
+  enabled: false
+  supports_full_document: true
+  vector_index:
+    chunk_size: 400
+    chunk_overlap: 50
+    limit: 10
+    extraction_strategy: express
+  generation:
+    prompt_instruction: ''
+    max_docs_passed_to_llm: 5
+    generated_response_length: Moderate
+    display_text_no_results_found: I searched my knowledge base, but did not find anything related to your query
+    display_text_connectivity_issue: I might have information related to your query to share, but am unable to connect to my knowledge base at the moment
+    idk_message: I'm afraid I don't understand. Please rephrase your question.
+    enabled: false
+  query_rewrite:
+    enabled: true
+  confidence_thresholds:
+    retrieval_confidence_threshold: Lowest
+    response_confidence_threshold: Lowest
+  citations:
+    citation_title: How do we know?
+    citations_shown: -1
+  hap_filtering:
+    output:
+      enabled: false
+      threshold: 0.5
+  query_source: Agent
+  agent_query_description: The query to search for in the knowledge base
+starter_prompts:
+  is_default_prompts: false
+  prompts:
+  - id: default0
+    title: Investigate root cause of INC0010001
+    subtitle: ''
+    prompt: Investigate the root cause of incident INC0010001
+    state: active
+  - id: default1
+    title: Checkout service has been returning 500s since 14:00
+    subtitle: ''
+    prompt: The checkout service has been returning 500 errors since 14:00 today. Incident sys_id is c9647e90c302031081a2f6edd40131c9. Please investigate.
+    state: active
+welcome_content:
+  welcome_message: Root-Cause Investigation Agent
+  description: Provide a ServiceNow incident sys_id to begin autonomous investigation.
+  is_default_message: false
+spec_version: v1

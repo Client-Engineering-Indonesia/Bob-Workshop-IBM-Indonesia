@@ -1,0 +1,124 @@
+kind: native
+name: Service_Desk_Agent_Example
+display_name: Service Desk Agent Example
+description: 'A service desk agent to read emails, log tickets, categorise risks and
+  send emails. '
+context_access_enabled: true
+context_variables: []
+restrictions: editable
+supported_apps: []
+llm: groq/openai/gpt-oss-120b
+style: default
+hide_reasoning: false
+instructions: |-
+  You are a Service Desk Agent that supports two teams with distinct workflows.
+  Based on what the user needs, you will either log incidents from emails or perform risk mapping on existing incidents — never both in one flow.
+
+  ## Teams & Capabilities
+
+  **Team 1 — IT Support (Incident Logging)**
+  Uses: EmailToIncident_flow
+  Goal: Fetch support emails and create ServiceNow incident tickets.
+
+  **Team 2 — Risk & Compliance (Risk Mapping)**
+  Uses: risk_mapping_agent
+  Goal: Map existing incidents to risk categories and retrieve relevant governance documentation.
+
+  ---
+
+  ## Routing Logic
+
+  When a user contacts you:
+  1. Identify which team they belong to, or ask: *"Are you logging a new incident from email, or mapping an existing incident to a risk category?"*
+  2. Route accordingly — do not mix both workflows in a single session.
+
+  ---
+
+  ## Workflow A — Incident Logging (IT Support)
+
+  Call `EmailToIncident_flow` to fetch unread support emails.
+
+  ---
+
+  ## Workflow B — Risk Mapping (Risk & Compliance)
+
+  1. Accept an incident ID or description from the user.
+  2. Delegate to `risk_mapping_agent` with the incident details.
+  3. Display agent output directly to the user
+
+  ---
+
+  ## General Guidelines
+  - Stay within the workflow relevant to the user — do not suggest or perform the other team's tasks.
+  - If input is ambiguous, ask one clarifying question before proceeding.
+  - Always confirm actions taken at the end of each response.
+guidelines: []
+collaborators:
+- risk_mapping_agent
+tools:
+- EmailToIncident_flow_3538Zb
+- get_incidents_154f7
+toolkits: []
+plugins:
+  agent_pre_invoke: []
+  agent_post_invoke: []
+knowledge_base: []
+chat_with_docs:
+  enabled: false
+  supports_full_document: true
+  vector_index:
+    chunk_size: 400
+    chunk_overlap: 50
+    limit: 10
+    extraction_strategy: express
+  generation:
+    prompt_instruction: ''
+    max_docs_passed_to_llm: 5
+    generated_response_length: Moderate
+    display_text_no_results_found: I searched my knowledge base, but did not find
+      anything related to your query
+    display_text_connectivity_issue: I might have information related to your query
+      to share, but am unable to connect to my knowledge base at the moment
+    idk_message: I'm afraid I don't understand. Please rephrase your question.
+    enabled: false
+  query_rewrite:
+    enabled: true
+  confidence_thresholds:
+    retrieval_confidence_threshold: Lowest
+    response_confidence_threshold: Lowest
+  citations:
+    citation_title: How do we know?
+    citations_shown: -1
+  hap_filtering:
+    output:
+      enabled: false
+      threshold: 0.5
+  query_source: Agent
+  agent_query_description: The query to search for in the knowledge base
+starter_prompts:
+  is_default_prompts: false
+  prompts:
+  - id: default0
+    title: A user reported that their laptop was stolen from the office. The device
+      contained unencrypted customer records including names, email addresses, and
+      account numbers.
+    subtitle: ''
+    prompt: A user reported that their laptop was stolen from the office. The device
+      contained unencrypted customer records including names, email addresses, and
+      account numbers.
+    state: active
+  - id: default1
+    title: Log all pending emails as incidents and set priority to high
+    subtitle: ''
+    prompt: Log all pending emails as incidents and set priority to high
+    state: active
+  - id: default2
+    title: I need help with an incident
+    subtitle: ''
+    prompt: I need help with an incident
+    state: active
+welcome_content:
+  welcome_message: Hello, welcome to watsonx Orchestrate
+  description: Accuracy of generated answers may vary. Please double-check responses.
+  is_default_message: false
+spec_version: v1

@@ -1,0 +1,39 @@
+# Python 3.13.5 Compatible Requirements
+# Service Desk Assistant Tutorial
+
+# Core Dependencies
+elasticsearch==8.15.1              # Elasticsearch client (Python 3.13 compatible)
+python-dotenv==1.0.1               # Environment variable management
+requests                  # HTTP library
+# PyGithub is not needed — investigation_tools.py calls the GitHub REST API directly via requests
+pydantic>=2.0.0                    # Data validation (required for @tool decorator)
+
+pandas>=2.2.0  # Required for Python 3.13 compatibility
+numpy>=1.26.0  # Required for Python 3.13 compatibility
+
+# IBM Watsonx
+# Note: ibm-watson-orchestrate-adk is not publicly available on PyPI
+# It must be installed separately from IBM's private repository or provided by IBM
+# ibm-watson-orchestrate-adk==1.0.0  # Watsonx Orchestrate ADK (install separately)
+ibm-watsonx-orchestrate==2.6.0
+ibm-watson>=8.0.0
+ibm-watsonx-ai>=1.1.0
+
+# HTTP Client
+#httpx==0.27.2                      # Async HTTP client (Python 3.13 compatible)
+
+# Document Processing
+# PyMuPDF==1.24.13                 # PDF parsing (not needed - using JSON instead)
+# langchain-text-splitters==0.3.2  # Text chunking (not needed - no chunking for JSON)
+
+# Embeddings & ML
+langchain-ibm>=0.3.0               # WatsonX embeddings via LangChain
+
+# Evaluation
+#ragas==0.2.3                       # RAG evaluation (Python 3.13 compatible)
+
+# Testing
+pytest==8.3.4                      # Testing framework (Python 3.13 compatible)
+
+# CLI & Output
+rich==13.9.4                       # Beautiful CLI output
