@@ -69,9 +69,9 @@
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    watsonx Orchestrate — Agentic Flow               │
 │                                                                     │
-│  [Start] → [List Emails in Gmail] → [For Each Email]               │
+│  [Start] → [List Emails in Gmail] → [For Each Email]                │
 │                                           │                         │
-│                              ┌────────────▼─────────────────┐      │
+│                              ┌────────────▼──────────────────┐      │
 │                              │  LOOP (per email)             │      │
 │                              │                               │      │
 │                              │  1. User Activity (notify)    │      │
