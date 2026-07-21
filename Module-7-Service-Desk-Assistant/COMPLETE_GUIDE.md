@@ -1558,7 +1558,3 @@ For high-volume:
 - [Agent Builder Tools Reference](https://ibm.github.io/watsonx-orchestrate-sdk/)
 - [ServiceNow REST API](https://developer.servicenow.com/dev.do#!/reference/api/vancouver/rest/)
 - [Elasticsearch Python Client](https://elasticsearch-py.readthedocs.io/)
-
----
-
-**Made with ❤️ using IBM Watsonx Orchestrate**
