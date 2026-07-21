@@ -1,0 +1,28 @@
+# ── Python virtual environment (1.4 GB) ───────────────────────────────────
+.venv/
+
+# ── Python cache ───────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── Node.js dependencies (57 MB) ──────────────────────────────────────────
+docling-mcp/node_modules/
+
+# ── Compiled TypeScript output — rebuilt with: npm run build ──────────────
+docling-mcp/build/
+
+# ── macOS junk ────────────────────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
+
+# ── Generated scan outputs ────────────────────────────────────────────────
+output_*.md
+output_*.json
+cli_output/
+example-doc/*.md
+
+# ── Secrets ───────────────────────────────────────────────────────────────
+.env
+*.env

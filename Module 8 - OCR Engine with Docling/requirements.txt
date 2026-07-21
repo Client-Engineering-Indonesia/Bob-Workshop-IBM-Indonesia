@@ -1,0 +1,7 @@
+# Core requirement — Python 3.10+ required
+docling>=2.114.0
+
+# Optional extras (uncomment as needed):
+# docling[easyocr]   — EasyOCR backend (heavier, supports more languages)
+# docling[vlm]       — Visual Language Model pipeline (GraniteDocling, etc.)
+# docling[all]       — All extras
