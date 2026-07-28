@@ -1,0 +1,21 @@
+{
+  "name": "db2-mcp-server",
+  "version": "0.1.0",
+  "description": "IBM Bob MCP server for IBM Db2",
+  "type": "module",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "ibm_db": "^3.2.4",
+    "undici": "^6.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
