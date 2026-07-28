@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "db2-techzone": {
+      "command": "node",
+      "args": ["C:/Users/<YourUsername>/path/to/db2-mcp-server/build/index.js"],
+      "env": {
+        "DB2_HOST": "<YOUR_DB2_VM_IP>",
+        "DB2_PORT": "25010",
+        "DB2_USERNAME": "db2demo",
+        "DB2_PASSWORD": "<YOUR_DB2_PASSWORD>",
+        "DB2_DATABASE": "DEMO_COL",
+        "DB2_CONSOLE_PORT": "11101"
+      },
+      "disabled": false,
+      "alwaysAllow": [
+        "db2_ping",
+        "db2_query",
+        "db2_list_tables",
+        "db2_describe_table",
+        "db2_get_indexes",
+        "db2_execute"
+      ]
+    }
+  }
+}
