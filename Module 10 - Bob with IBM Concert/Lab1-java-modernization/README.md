@@ -19,111 +19,14 @@ https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp
 ```
 
 ## Prerequisites
-Before starting this lab, ensure you have the following installed:
 
-### 1. IBM Bob IDE
-- Ensure you have IBM Bob latest version installed
-- Login through Bob to get connected
+> 👀 **Lab 1 ini adalah sesi demo** — presenter yang akan menjalankan langkah-langkahnya. Kamu cukup menyaksikan dan memahami prosesnya. **Tidak perlu install apapun untuk Lab 1.**
 
-### 2. SDKMAN! (SDK Manager)
+Untuk referensi (jika kamu ingin mencoba sendiri di lain waktu):
 
-SDKMAN! is a tool for managing parallel versions of multiple Software Development Kits.
-
-#### For macOS/Linux Users
-
-**Installation Instructions:**
-```bash
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-```
-
-**Verify Installation:**
-```bash
-sdk version
-```
-
-You should see output like: `SDKMAN! 5.x.x`
-
-#### For Windows Users
-
-SDKMAN! is designed for Unix-based systems. Windows users have two options:
-
-**Option 1: Use WSL (Windows Subsystem for Linux) - Recommended**
-
-1. Install WSL if not already installed:
-   ```powershell
-   wsl --install
-   ```
-
-2. Open WSL terminal and follow the macOS/Linux instructions above
-
-**Option 2: Install Java and Maven Manually**
-
-1. **Install Java:**
-   - Download Java JDK from [Oracle](https://www.oracle.com/java/technologies/downloads/) or [Adoptium](https://adoptium.net/)
-   - Run the installer
-   - Set `JAVA_HOME` environment variable:
-     - Open System Properties → Environment Variables
-     - Add new system variable: `JAVA_HOME` = `C:\Program Files\Java\jdk-21` (adjust path as needed)
-     - Add to `Path`: `%JAVA_HOME%\bin`
-
-2. **Install Maven:**
-   - Download Maven from [Apache Maven](https://maven.apache.org/download.cgi)
-   - Extract to `C:\Program Files\Apache\maven`
-   - Set `MAVEN_HOME` environment variable:
-     - Add new system variable: `MAVEN_HOME` = `C:\Program Files\Apache\maven`
-     - Add to `Path`: `%MAVEN_HOME%\bin`
-
-3. **Verify Installation:**
-   ```powershell
-   java -version
-   mvn --version
-   ```
-
-**For detailed SDKMAN! instructions, visit:** https://sdkman.io/install/
-
-### 3. Maven (via SDKMAN!)
-
-#### For macOS/Linux Users
-
-After installing SDKMAN!, install Maven:
-
-```bash
-sdk install maven
-```
-
-**Verify Maven Installation:**
-```bash
-mvn --version
-```
-
-You should see Maven version information along with the Java version that Maven is using.
-
-**Important Note on Java Versions:**
-
-When you run `mvn --version`, it shows the Java version that Maven will use to build your project. This may differ from your system's default Java version (shown by `java -version`). Maven uses the Java version specified by the `JAVA_HOME` environment variable or the Java installation that SDKMAN! has configured.
-
-#### For Windows Users
-
-If you installed Maven manually (Option 2 above), verify it's working:
-
-```powershell
-mvn --version
-```
-
-You should see Maven version information and the Java version Maven is using.
-
-### Important: Restart Bob After Maven Installation
-
-**⚠️ CRITICAL STEP:** After installing Maven (via SDKMAN! or manually), you **MUST** close and restart IBM Bob (or your IDE) for the changes to take effect. This ensures Bob can detect and use the newly installed Maven.
-
-**To restart Bob:**
-1. Close your IDE completely
-2. Reopen your IDE
-3. Verify Maven is detected by running the verification command in Bob's terminal:
-   ```bash
-   mvn --version
-   ```
+- **IBM Bob IDE** — Versi terbaru, sudah login
+- **SDKMAN! + Maven** — Untuk build Java. Install via `curl -s "https://get.sdkman.io" | bash`, lalu `sdk install maven`
+- **Java JDK 17+** — Target upgrade version
 
 ## Forking the Repository
 

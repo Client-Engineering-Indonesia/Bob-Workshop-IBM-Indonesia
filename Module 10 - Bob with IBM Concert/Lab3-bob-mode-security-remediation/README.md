@@ -1,12 +1,12 @@
-# Lab 3 — Bob Mode: Connect with IBM Concert
+# Lab 3 — Setup Bob Security Remediation Mode
 
-This guide walks you through setting up Bob's **Security Remediation** mode and connecting it to IBM Concert.
+Hubungkan Bob ke IBM Concert dalam 4 langkah.
 
 ---
 
 ## 🔑 Workshop Credentials
 
-> **Peserta Workshop:** 3 nilai di bawah akan dibagikan oleh presenter saat sesi ini dimulai. **Jangan di-commit ke GitHub!**
+> **Peserta:** 3 nilai di bawah akan dibagikan presenter saat sesi ini dimulai. **Jangan di-commit ke GitHub!**
 
 | Variable | Deskripsi |
 |----------|-----------|
@@ -16,67 +16,22 @@ This guide walks you through setting up Bob's **Security Remediation** mode and 
 
 ---
 
-## Overview
+## Step-by-Step
 
-Bob's Security Remediation mode memungkinkan kamu untuk:
-- Terhubung ke IBM Concert dan mengambil data vulnerability
-- Menganalisis CVE (dependency) dan SAST exposures (code-level)
-- Mengusulkan dan mengaplikasikan security fixes
-- Menjalankan tests untuk validasi fixes
-- Mengupdate status vulnerability di Concert setelah remediation
+### Step 1: Buka Folder `Module 10` di VS Code
 
----
+Buka VS Code, lalu:
+- **File → Open Folder**
+- Pilih folder `Module 10 - Bob with IBM Concert`
+- Klik **Open**
 
-## Step-by-Step Guide
-
-### Step 1: Clone Repository
-
-Clone repository `VulnerableSampleApp` ke local machine kamu:
-
-```bash
-git clone https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp.git
-cd VulnerableSampleApp
-```
+> ✅ Folder `.bob` sudah tersedia di dalam folder ini — tidak perlu copy apapun.
 
 ---
 
-### Step 2: Copy `.bob` Directory ke Workspace
+### Step 2: Buat File `.env` dengan Credentials
 
-Bob membaca custom modes dari folder `.bob` di root workspace yang sedang kamu buka. Copy folder `.bob` dari repo workshop ini ke dalam folder `VulnerableSampleApp`:
-
-```bash
-# Dari dalam folder VulnerableSampleApp
-cp -r ../Bob-Workshop-IBM-Indonesia/"Module 10 - Bob with IBM Concert"/Lab3-bob-mode-security-remediation/.bob ./
-```
-
-Atau kalau kamu clone workshop repo secara terpisah:
-
-```bash
-cp -r <path-to-workshop>/Lab3-bob-mode-security-remediation/.bob ./
-```
-
-Setelah dicopy, struktur folder kamu akan terlihat seperti ini:
-
-```
-VulnerableSampleApp/
-├── .bob/                        ← ✅ baru dicopy
-│   ├── custom_modes.yaml
-│   └── rules/
-│       └── rules-security-remediation/
-│           ├── README.md
-│           ├── concert-api-integration.md
-│           └── remediation-strategies.md
-├── VulnerableApp.java
-└── pom.xml
-```
-
-![Copy .bob directory](image/1-copy-bob.png)
-
----
-
-### Step 3: Buat File `.env` dengan Credentials
-
-Paste command berikut di terminal, **ganti 3 nilai** dengan credentials dari presenter:
+Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `), lalu paste command berikut. **Ganti 3 nilai** dengan credentials dari presenter:
 
 ```bash
 cat > .env << EOF
@@ -87,8 +42,7 @@ EOF
 ```
 
 Contoh hasil `.env` yang sudah terisi:
-
-```bash
+```
 CONCERT_BASE_URL=https://your-concert-host:12443/concert/core/api/v1
 CONCERT_API_KEY=Y29uY2VydHVzZXI6...
 CONCERT_INSTANCE_ID=0000-0000-0000-0000
@@ -98,22 +52,23 @@ CONCERT_INSTANCE_ID=0000-0000-0000-0000
 
 ---
 
-### Step 4: Reload Bob & Verifikasi Mode
+### Step 3: Reload VS Code
 
-Reload VS Code agar Bob membaca `custom_modes.yaml` yang baru dicopy:
+Agar Bob membaca `custom_modes.yaml` yang ada di folder `.bob`:
 
 - **Mac:** `Cmd+Shift+P` → ketik `Reload Window` → Enter
 - **Windows/Linux:** `Ctrl+Shift+P` → ketik `Reload Window` → Enter
 
-Setelah reload, buka Bob dan klik mode selector. Pastikan **🔒 Security Remediation** muncul di list:
+---
+
+### Step 4: Verifikasi Mode & Test Koneksi
+
+1. Buka Bob, klik **mode selector**
+2. Pastikan **🔒 Security Remediation** muncul di list
 
 ![Bob Security Remediation mode muncul](image/2-modes.png)
 
----
-
-### Step 5: Test Koneksi ke Concert
-
-Pilih mode **🔒 Security Remediation**, lalu ketik di Bob:
+3. Pilih mode **🔒 Security Remediation**, lalu ketik:
 
 ```
 Check Concert for vulnerabilities
@@ -121,30 +76,21 @@ Check Concert for vulnerabilities
 
 ![Ketik Check Concert for vulnerabilities](image/3-testing-bob.png)
 
-Bob akan otomatis:
-1. Membaca credentials dari `.env`
-2. Test koneksi ke Concert API (`/kpis` endpoint)
-3. Menampilkan semua aplikasi yang terdaftar di Concert
-
-**Alur yang akan kamu lihat:**
-
-Bob melakukan health check ke Concert:
+Bob akan otomatis test koneksi dan menampilkan daftar aplikasi di Concert:
 
 ![Bob test Concert API connection](image/3.1-testing-bob.png)
 
-Bob meminta approval untuk menjalankan curl command — klik **Approve**:
+Klik **Approve** saat Bob meminta permission menjalankan curl:
 
 ![Bob meminta approval](image/3.2-testing-bob.png)
 
-Bob mengkonfirmasi `.env` berhasil dibaca:
-
 ![Bob konfirmasi .env terbaca](image/3.3-testing-bob.png)
 
-Koneksi berhasil — Concert API connected:
+Koneksi berhasil:
 
 ![Concert API connection success](image/3.4-testing-bob.png)
 
-Bob menampilkan daftar aplikasi di Concert — kamu bisa melihat `VulnerableSampleApp`:
+Daftar aplikasi di Concert muncul:
 
 ![Daftar aplikasi di Concert](image/3.5-testing-bob.png)
 
@@ -152,7 +98,7 @@ Bob menampilkan daftar aplikasi di Concert — kamu bisa melihat `VulnerableSamp
 
 ## ✅ Checklist Sebelum Lanjut ke Lab 4
 
-- [ ] Folder `.bob` sudah ada di root `VulnerableSampleApp/`
+- [ ] Folder `Module 10 - Bob with IBM Concert` terbuka di VS Code
 - [ ] File `.env` sudah ada dengan 3 credentials terisi
 - [ ] Mode **🔒 Security Remediation** muncul di Bob
 - [ ] Bob berhasil connect ke Concert dan menampilkan daftar aplikasi

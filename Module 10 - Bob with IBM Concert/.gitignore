@@ -12,3 +12,6 @@
 .env
 
 # Made with Bob
+
+# Technical documentation (internal reference only)
+TECHNICAL_README.md

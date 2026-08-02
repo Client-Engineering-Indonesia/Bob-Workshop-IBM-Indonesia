@@ -39,9 +39,9 @@ Deploy Rules → Activate Mode → Discover Apps via Concert
 > ✅ Jika kamu sudah selesai Lab 3, semua prerequisites ini sudah terpenuhi.
 
 - [ ] IBM Bob terinstall di VS Code dan sudah login
-- [ ] Folder `.bob` sudah ada di root `VulnerableSampleApp/` (dari Lab 3 Step 2)
-- [ ] File `.env` sudah berisi Concert credentials (dari Lab 3 Step 3)
-- [ ] Mode **🔒 Security Remediation** sudah muncul di Bob (dari Lab 3 Step 4)
+- [ ] Folder `Module 10 - Bob with IBM Concert` sudah terbuka di VS Code (dari Lab 3 Step 1)
+- [ ] File `.env` sudah berisi Concert credentials (dari Lab 3 Step 2)
+- [ ] Mode **🔒 Security Remediation** sudah muncul di Bob (dari Lab 3 Step 3-4)
 - [ ] `VulnerableSampleApp` sudah terdaftar dan ter-scan di IBM Concert
 - [ ] `jq` terinstall: `brew install jq` (Mac) / `apt install jq` (Linux)
 
@@ -88,37 +88,7 @@ In the BOB interface, click the mode selector and choose **"🔒 Security Remedi
 ![BOB Security Remediation Mode Selected](image/03-bob-security-remediation-mode-selected.png)
 > *📸 BOB mode dropdown showing "🔒 Security Remediation" selected*
 
-### 2.3 Configure Concert Credentials (First Time Only)
-
-On first activation in a new workspace, BOB will interactively guide you through setting up your `.env` file:
-
-```
-BOB: This mode is currently compatible for Concert v2.3.1.
-
-BOB: What is your Concert instance URL?
-     (e.g., https://<your-concert-host>:12443)
-
-You: https://<your-concert-host>:12443
-
-BOB: What is your Concert username?
-You: concertuser
-
-BOB: What is your Concert API key?
-You: <your-api-key>
-
-BOB: What is your Concert Instance ID? (default: 0000-0000-0000-0000)
-You: [press Enter for default]
-
-BOB: ✅ .env file created successfully!
-```
-
-The resulting `.env` will look like:
-
-```env
-CONCERT_BASE_URL=https://<your-concert-host>:12443/concert/core/api/v1
-CONCERT_API_KEY=<base64-encoded-username:apikey>
-CONCERT_INSTANCE_ID=0000-0000-0000-0000
-```
+> ✅ **Credentials sudah di-setup di Lab 3 Step 3.** Kalau `.env` sudah ada di root `VulnerableSampleApp/`, Bob akan langsung membacanya tanpa perlu setup ulang.
 
 ---
 
