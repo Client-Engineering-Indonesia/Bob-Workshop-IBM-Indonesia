@@ -27,10 +27,9 @@ Deploy Rules → Activate Mode → Discover Apps via Concert
 
 | Asset | Path | Description |
 |-------|------|-------------|
-| Security Remediation Rules | `VulnerableSampleApp/.bob/rules/rules-security-remediation/` | BOB mode rules and Concert API integration guides |
-| BOB Mode Config | `VulnerableSampleApp/.bob/custom_modes.yaml` | Custom mode definitions for BOB |
-| Original Application (14 SAST) | `VulnerableSampleApp/` | Vulnerable Java app (pre-fix) |
-| GitHub Repository | `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp` | Public repo untuk di-fork peserta |
+| Security Remediation Rules | `Module 10 - Bob with IBM Concert/.bob/rules/rules-security-remediation/` | BOB mode rules and Concert API integration guides |
+| BOB Mode Config | `Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml` | Custom mode definitions for BOB |
+| Vulnerable Application | `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp` | Aplikasi Java yang akan di-clone dan diremediate oleh Bob |
 
 ---
 
@@ -86,7 +85,7 @@ In the BOB interface, click the mode selector and choose **"🔒 Security Remedi
 ![BOB Security Remediation Mode Selected](image/03-bob-security-remediation-mode-selected.png)
 > *📸 BOB mode dropdown showing "🔒 Security Remediation" selected*
 
-> ✅ **Credentials sudah di-setup di Lab 3 Step 3.** Kalau `.env` sudah ada di root `VulnerableSampleApp/`, Bob akan langsung membacanya tanpa perlu setup ulang.
+> Kredensial sudah dikonfigurasi pada Lab 3 Langkah 2. Apabila file `.env` sudah tersedia di root `Module 10 - Bob with IBM Concert/`, Bob akan langsung membacanya tanpa perlu setup ulang.
 
 ---
 
