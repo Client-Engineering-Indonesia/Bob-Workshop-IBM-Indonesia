@@ -65,30 +65,6 @@ customModes:
          - Read `CONCERT_BASE_URL` from `.env`
          - Confirm it ends with `/concert/core/api/v1`
 
-      2. **Ask for Concert Username**:
-         - Prompt: "What is your Concert username?"
-         - Wait for response
-
-      3. **Ask for Concert API Key**:
-         - Prompt: "What is your Concert API key?"
-         - Wait for response
-         - Encode as base64: `echo -n "username:apikey" | base64`
-
-      4. **Ask for Instance ID**:
-         - Prompt: "What is your Concert Instance ID? (default: 0000-0000-0000-0000)"
-         - Wait for response (use default if empty)
-
-      5. **Create .env file**:
-         ```bash
-         cat > .env << EOF
-         CONCERT_BASE_URL={constructed_url}
-         CONCERT_API_KEY={base64_encoded_key}
-         CONCERT_INSTANCE_ID={instance_id}
-         EOF
-         ```
-
-      6. **Confirm creation**: "✅ .env file created successfully!"
-
       ### PHASE 1: Test API Connection
 
       **Always test connection at the start of each session** using the KPIs health endpoint:

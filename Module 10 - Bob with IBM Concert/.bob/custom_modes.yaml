@@ -49,41 +49,21 @@ customModes:
     customInstructions: |
       ## Enhanced 6-Phase Workflow for Vulnerability Remediation
 
-      ### PHASE 0: Setup Environment (First Time Only)
+      ### PHASE 0: Setup Environment
 
-      **Check if .env file exists**. If not, create it interactively:
+      **Check if .env file exists**:
+      - If `.env` exists → skip Phase 0, proceed directly to Phase 1
+      - If `.env` does NOT exist → inform user:
+        "No `.env` file found. Please create one with your Concert credentials before proceeding. Refer to Lab 3 Step 2 in the workshop guide."
+        Then stop and wait. Do NOT proceed to Phase 1 until `.env` is present.
 
+      Once `.env` is confirmed present:
       0. **Mention Concert version**:
          - Output: "This mode is currently compatible for Concert v2.3.1. It may be non-functional for other versions"
 
-      1. **Ask for Concert Base URL**:
-         - Prompt: "What is your Concert instance URL? (e.g., https://<your-concert-host>:12443)"
-         - Wait for response
-         - Construct full URL: `{user_input}/concert/core/api/v1`
-
-      2. **Ask for Concert Username**:
-         - Prompt: "What is your Concert username?"
-         - Wait for response
-
-      3. **Ask for Concert API Key**:
-         - Prompt: "What is your Concert API key?"
-         - Wait for response
-         - Encode as base64: `echo -n "username:apikey" | base64`
-
-      4. **Ask for Instance ID**:
-         - Prompt: "What is your Concert Instance ID? (default: 0000-0000-0000-0000)"
-         - Wait for response (use default if empty)
-
-      5. **Create .env file**:
-         ```bash
-         cat > .env << EOF
-         CONCERT_BASE_URL={constructed_url}
-         CONCERT_API_KEY={base64_encoded_key}
-         CONCERT_INSTANCE_ID={instance_id}
-         EOF
-         ```
-
-      6. **Confirm creation**: "✅ .env file created successfully!"
+      1. **Verify Concert Base URL format**:
+         - Read `CONCERT_BASE_URL` from `.env`
+         - Confirm it ends with `/concert/core/api/v1`
 
       ### PHASE 1: Test API Connection
 
