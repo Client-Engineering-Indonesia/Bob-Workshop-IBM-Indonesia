@@ -1,0 +1,14 @@
+# Image directories (all image folders in the project)
+# **/image/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables
+.env
+
+# Made with Bob
