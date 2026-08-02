@@ -1,7 +1,7 @@
-# BOB + Concert Security Remediation Demo Guide
+# Lab 4 — Automated Vulnerability Remediation
 
-**IBM BOB (SDLC AI Assistant) × IBM Concert (Application Security)**
-A step-by-step walkthrough of how BOB, integrated with IBM Concert, automatically identifies and remediates SAST (Static Application Security Testing) exposures in an e-commerce Java application.
+**IBM Bob (SDLC AI Assistant) × IBM Concert (Application Security)**
+Panduan langkah demi langkah penggunaan Bob yang terintegrasi dengan IBM Concert untuk mendeteksi dan memperbaiki SAST (Static Application Security Testing) exposures secara otomatis.
 
 ---
 
@@ -36,7 +36,7 @@ Deploy Rules → Activate Mode → Discover Apps via Concert
 
 ## Prerequisites
 
-> ✅ Jika kamu sudah selesai Lab 3, semua prerequisites ini sudah terpenuhi.
+> Apabila Lab 3 telah diselesaikan, seluruh prasyarat berikut sudah terpenuhi.
 
 - [ ] IBM Bob terinstall di VS Code dan sudah login
 - [ ] Folder `Module 10 - Bob with IBM Concert` sudah terbuka di VS Code (dari Lab 3 Step 1)
@@ -49,10 +49,10 @@ Deploy Rules → Activate Mode → Discover Apps via Concert
 
 ## Step 1 — Pastikan Security Remediation Mode Sudah Aktif
 
-Setelah menyelesaikan Lab 3, Bob sudah memiliki `.bob` directory dengan struktur berikut di workspace `VulnerableSampleApp`:
+Setelah menyelesaikan Lab 3, workspace `Module 10 - Bob with IBM Concert` sudah memiliki struktur berikut:
 
 ```
-VulnerableSampleApp/
+Module 10 - Bob with IBM Concert/
 ├── .bob/
 │   ├── custom_modes.yaml              ← Mode definition
 │   └── rules/
@@ -60,9 +60,7 @@ VulnerableSampleApp/
 │           ├── README.md              ← Mode overview
 │           ├── concert-api-integration.md   ← Concert API reference
 │           └── remediation-strategies.md    ← Fix patterns
-├── .env                               ← Concert credentials (dari Lab 3)
-├── VulnerableApp.java
-└── pom.xml
+└── .env                               ← Concert credentials (dari Lab 3)
 ```
 
 Buka Bob dan verifikasi mode **🔒 Security Remediation** muncul:
@@ -204,9 +202,9 @@ Confirm and BOB applies changes surgically, one file at a time:
 ```
 You: Yes, apply all fixes
 
-BOB: ✅ Fix 1/14 applied — ProductController.java:67 (RCE removed)
-BOB: ✅ Fix 2/14 applied — ProductController.java:45 (SQL Injection → PreparedStatement)
-BOB: ✅ Fix 3/14 applied — CommentController.java:120 (XSS → encoded output)
+BOB: ✅ Fix 1/14 applied — VulnerableApp.java:200 (RCE removed)
+BOB: ✅ Fix 2/14 applied — VulnerableApp.java:41 (SQL Injection → PreparedStatement)
+BOB: ✅ Fix 3/14 applied — VulnerableApp.java:120 (XSS → encoded output)
 ...
 BOB: ✅ All 14 fixes applied. Running tests...
 BOB: 🧪 Tests passed (47/47)
@@ -304,7 +302,7 @@ The exposure count dropped from **14 → 1**, confirming that BOB's automated se
 ### A. Folder Structure Reference
 
 ```
-VulnerableSampleApp/
+Module 10 - Bob with IBM Concert/
 ├── .bob/                                           ← Bob mode config & rules
 │   ├── custom_modes.yaml
 │   └── rules/
@@ -312,6 +310,7 @@ VulnerableSampleApp/
 │           ├── README.md
 │           ├── concert-api-integration.md
 │           └── remediation-strategies.md
+├── .env                                            ← Concert credentials
 ├── Lab4-vulnerabilities-mitigation-using-bob/
 │   └── image/                                      ← All screenshot images
 │       ├── 01-bob-settings-custom-modes.png
@@ -331,15 +330,16 @@ VulnerableSampleApp/
 │       ├── 16-concert-scan-in-progress.png
 │       ├── 17-concert-before-14-sast.png
 │       └── 18-concert-after-1-sast.png
-├── VulnerableApp.java                              ← Original code (14 SAST issues)
-└── pom.xml
+└── VulnerableSampleApp/                            ← di-clone otomatis oleh Bob
+    ├── VulnerableApp.java
+    └── pom.xml
 ```
 
 ### B. BOB Workflow Phases Reference
 
 | Phase | Name | What Happens |
 |-------|------|-------------|
-| 0 | Setup Environment | BOB creates `.env` with Concert credentials (first use only) |
+| 0 | Setup Environment | `.env` dibuat manual oleh peserta di Lab 3 (sudah selesai) |
 | 1 | Test API Connection | BOB pings Concert `/kpis` endpoint to verify connectivity |
 | 2 | Discover Applications | BOB lists all apps registered in Concert |
 | 3 | Clone Repository | BOB clones the selected app's repo via HTTPS or SSH |

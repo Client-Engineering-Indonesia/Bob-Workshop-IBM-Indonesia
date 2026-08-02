@@ -435,7 +435,7 @@ try {
 
 **Vulnerable Code:**
 ```java
-// ProductController.java:67
+// VulnerableApp.java:200
 String expression = request.getParameter("priceFormula");
 ScriptEngineManager manager = new ScriptEngineManager();
 ScriptEngine engine = manager.getEngineByName("JavaScript");
@@ -444,7 +444,7 @@ Double calculatedPrice = (Double) engine.eval(expression);
 
 **Secure Fix:**
 ```java
-// ProductController.java:67
+// VulnerableApp.java:200
 String operation = request.getParameter("operation");
 Double basePrice = Double.parseDouble(request.getParameter("basePrice"));
 Double modifier = Double.parseDouble(request.getParameter("modifier"));

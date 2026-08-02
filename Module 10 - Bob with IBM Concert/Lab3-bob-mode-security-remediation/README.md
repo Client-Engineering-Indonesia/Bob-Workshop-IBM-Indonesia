@@ -4,71 +4,79 @@ Hubungkan Bob ke IBM Concert dalam 4 langkah.
 
 ---
 
-## 🔑 Workshop Credentials
+## Kredensial Workshop
 
-> **Peserta:** 3 nilai di bawah akan dibagikan presenter saat sesi ini dimulai. **Jangan di-commit ke GitHub!**
+> **Peserta:** Tiga nilai berikut akan dibagikan oleh presenter pada saat sesi ini dimulai. **Jangan di-commit ke GitHub.**
 
-| Variable | Deskripsi |
+| Variabel | Deskripsi |
 |----------|-----------|
 | `CONCERT_BASE_URL` | URL Concert instance + `/concert/core/api/v1` |
 | `CONCERT_API_KEY` | API key dalam format base64 |
-| `CONCERT_INSTANCE_ID` | Instance ID Concert (biasanya `0000-0000-0000-0000`) |
+| `CONCERT_INSTANCE_ID` | Instance ID Concert (umumnya `0000-0000-0000-0000`) |
 
 ---
 
-## Step-by-Step
+## Langkah-Langkah
 
-### Step 1: Buka Folder `Module 10` di VS Code
+### Langkah 1: Buka Folder `Module 10` di VS Code
 
 Buka VS Code, lalu:
 - **File → Open Folder**
 - Pilih folder `Module 10 - Bob with IBM Concert`
 - Klik **Open**
 
-> ✅ Folder `.bob` sudah tersedia di dalam folder ini — tidak perlu copy apapun.
+> Folder `.bob` sudah tersedia di dalam folder ini — tidak diperlukan konfigurasi tambahan.
 
 ---
 
-### Step 2: Buat File `.env` dengan Credentials
+### Langkah 2: Buat File `.env` dengan Kredensial
 
-Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `), lalu paste command berikut. **Ganti 3 nilai** dengan credentials dari presenter:
+Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `), lalu jalankan perintah berikut. **Ganti ketiga nilai** dengan kredensial dari presenter:
 
 ```bash
 cat > .env << EOF
-CONCERT_BASE_URL=<ISI_DARI_PRESENTER>
-CONCERT_API_KEY=<ISI_DARI_PRESENTER>
-CONCERT_INSTANCE_ID=<ISI_DARI_PRESENTER>
+CONCERT_BASE_URL=<DIISI_DARI_PRESENTER>
+CONCERT_API_KEY=<DIISI_DARI_PRESENTER>
+CONCERT_INSTANCE_ID=<DIISI_DARI_PRESENTER>
 EOF
 ```
 
-Contoh hasil `.env` yang sudah terisi:
+Contoh file `.env` yang telah terisi:
 ```
 CONCERT_BASE_URL=https://your-concert-host:12443/concert/core/api/v1
 CONCERT_API_KEY=Y29uY2VydHVzZXI6...
 CONCERT_INSTANCE_ID=0000-0000-0000-0000
 ```
 
-> ⚠️ File `.env` sudah ada di `.gitignore` — aman, tidak akan ke-push ke GitHub.
+> File `.env` sudah terdaftar di `.gitignore` — tidak akan ter-push ke GitHub.
 
 ---
 
-### Step 3: Reload VS Code
+### Langkah 3: Import Custom Mode ke Bob
 
-Agar Bob membaca `custom_modes.yaml` yang ada di folder `.bob`:
+Bob membaca `custom_modes.yaml` dari folder `.bob` di workspace yang sedang dibuka. Lakukan langkah berikut agar mode terdaftar:
+
+1. Klik ikon **Settings** (⚙️) di panel Bob
+2. Pilih tab **Modes**
+3. Klik **Edit Project Modes**
+
+Bob akan membuka file `.bob/custom_modes.yaml` yang sudah tersedia di folder ini. Mode **🔒 Security Remediation** akan otomatis terdaftar.
+
+Alternatif — reload VS Code agar Bob membaca ulang konfigurasi:
 
 - **Mac:** `Cmd+Shift+P` → ketik `Reload Window` → Enter
 - **Windows/Linux:** `Ctrl+Shift+P` → ketik `Reload Window` → Enter
 
 ---
 
-### Step 4: Verifikasi Mode & Test Koneksi
+### Langkah 4: Verifikasi Mode dan Uji Koneksi
 
 1. Buka Bob, klik **mode selector**
-2. Pastikan **🔒 Security Remediation** muncul di list
+2. Pastikan **🔒 Security Remediation** muncul pada daftar mode
 
 ![Bob Security Remediation mode muncul](image/2-modes.png)
 
-3. Pilih mode **🔒 Security Remediation**, lalu ketik:
+3. Klik **🔒 Security Remediation** untuk mengaktifkan mode tersebut, lalu ketik perintah berikut di chat Bob:
 
 ```
 Check Concert for vulnerabilities
@@ -76,11 +84,11 @@ Check Concert for vulnerabilities
 
 ![Ketik Check Concert for vulnerabilities](image/3-testing-bob.png)
 
-Bob akan otomatis test koneksi dan menampilkan daftar aplikasi di Concert:
+Bob akan secara otomatis menguji koneksi dan menampilkan daftar aplikasi yang terdaftar di Concert:
 
 ![Bob test Concert API connection](image/3.1-testing-bob.png)
 
-Klik **Approve** saat Bob meminta permission menjalankan curl:
+Klik **Approve** saat Bob meminta izin untuk menjalankan perintah curl:
 
 ![Bob meminta approval](image/3.2-testing-bob.png)
 
@@ -90,21 +98,21 @@ Koneksi berhasil:
 
 ![Concert API connection success](image/3.4-testing-bob.png)
 
-Daftar aplikasi di Concert muncul:
+Daftar aplikasi di Concert ditampilkan:
 
 ![Daftar aplikasi di Concert](image/3.5-testing-bob.png)
 
 ---
 
-## ✅ Checklist Sebelum Lanjut ke Lab 4
+## Checklist Sebelum Melanjutkan ke Lab 4
 
 - [ ] Folder `Module 10 - Bob with IBM Concert` terbuka di VS Code
-- [ ] File `.env` sudah ada dengan 3 credentials terisi
+- [ ] File `.env` sudah berisi ketiga kredensial yang diberikan presenter
 - [ ] Mode **🔒 Security Remediation** muncul di Bob
-- [ ] Bob berhasil connect ke Concert dan menampilkan daftar aplikasi
+- [ ] Bob berhasil terhubung ke Concert dan menampilkan daftar aplikasi
 
 ---
 
-## Next Steps
+## Langkah Selanjutnya
 
-Lanjut ke **[Lab 4 → Automated Vulnerability Remediation](../Lab4-vulnerabilities-mitigation-using-bob/README.md)**
+Lanjutkan ke **[Lab 4 → Automated Vulnerability Remediation](../Lab4-vulnerabilities-mitigation-using-bob/README.md)**

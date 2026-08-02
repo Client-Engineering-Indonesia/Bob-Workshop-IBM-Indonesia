@@ -163,9 +163,9 @@ Bob:
 Found 15 exposures (3 Priority 1, 7 Priority 2, 5 Priority 3):
 
 Priority 1 (Critical):
-1. [RCE] rce.java.script-engine-eval - ProductController.java:67
-2. [SQL Injection] sqli.java.method-param-sql-concat - ProductController.java:45
-3. [XSS] xss.java.servlet-writer - CommentController.java:120
+1. [RCE] rce.java.script-engine-eval - VulnerableApp.java:200
+2. [SQL Injection] sqli.java.method-param-sql-concat - VulnerableApp.java:41
+3. [XSS] xss.java.servlet-writer - VulnerableApp.java:120
 
 Which exposure would you like to fix? (Enter number)
 
@@ -196,7 +196,7 @@ Shall I apply this fix?
 User: "Yes"
 
 Bob:
-✅ Fix applied to ProductController.java
+✅ Fix applied to VulnerableApp.java
 🧪 Running tests... All tests passed!
 📝 Updating Concert status to "Resolved"
 

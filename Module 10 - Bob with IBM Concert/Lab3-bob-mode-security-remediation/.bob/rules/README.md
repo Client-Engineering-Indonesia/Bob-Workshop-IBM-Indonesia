@@ -13,24 +13,15 @@ This mode is configured as a **Global Mode**, which means:
 
 When you open a new workspace and activate Security Remediation mode:
 
-1. **First time in new workspace**: Bob will detect no `.env` file and guide you through interactive setup
-2. **Subsequent uses**: Bob will use the existing `.env` file in that workspace
-3. **Different Concert instances**: Each workspace can connect to different Concert instances
+1. **`.env` file present**: Bob will read credentials and proceed directly to connection test
+2. **No `.env` file**: Bob will stop and ask you to create one — refer to Lab 3 Step 2
 
 ### Example Workflow
 
 ```
-Workspace A (/projects/app1)
-├── .env (Concert instance A credentials)
-└── Uses Security Remediation mode
-
-Workspace B (/projects/app2)
-├── .env (Concert instance B credentials)
-└── Uses same Security Remediation mode
-
-Workspace C (/projects/app3)
-├── No .env yet
-└── Bob will create it interactively on first use
+Module 10 - Bob with IBM Concert/
+├── .env  ← created in Lab 3 Step 2
+└── .bob/ ← already included in the workshop repo
 ```
 
 ## Files
@@ -163,9 +154,9 @@ Bob:
 Found 15 exposures (3 Priority 1, 7 Priority 2, 5 Priority 3):
 
 Priority 1 (Critical):
-1. [RCE] rce.java.script-engine-eval - ProductController.java:67
-2. [SQL Injection] sqli.java.method-param-sql-concat - ProductController.java:45
-3. [XSS] xss.java.servlet-writer - CommentController.java:120
+1. [RCE] rce.java.script-engine-eval - VulnerableApp.java:200
+2. [SQL Injection] sqli.java.method-param-sql-concat - VulnerableApp.java:41
+3. [XSS] xss.java.servlet-writer - VulnerableApp.java:120
 
 Which exposure would you like to fix? (Enter number)
 
@@ -196,7 +187,7 @@ Shall I apply this fix?
 User: "Yes"
 
 Bob:
-✅ Fix applied to ProductController.java
+✅ Fix applied to VulnerableApp.java
 🧪 Running tests... All tests passed!
 📝 Updating Concert status to "Resolved"
 
