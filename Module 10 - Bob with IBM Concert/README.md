@@ -35,7 +35,7 @@ This hands-on lab series guides you through:
 └─────────────────────────────────────────────────────────────────┘
 
 1. Fork Repository (GitHub)
-   └─> ecommerce-backend (Java 8 application)
+   └─> VulnerableSampleApp (Java 8 application)
 
 2. Java Modernization (Bob)
    └─> Upgrade Java 8 → Java 17
@@ -71,7 +71,7 @@ Before starting the labs, ensure you have:
 
 - **IBM Bob IDE** (latest version) - VS Code or JetBrains with Bob extension
 - **IBM Concert Access** - URL, credentials, and API key
-- **GitHub Enterprise Access** - Ability to fork repositories on `github.ibm.com`
+- **GitHub Access** - Ability to fork repositories on `github.com`
 - **Basic Knowledge** - Java programming, Git workflows, CLI basics
 
 ### Lab-Specific Prerequisites
@@ -120,8 +120,8 @@ beacon-bob-concert/
 ### Step 1: Clone This Repository
 
 ```bash
-git clone https://github.ibm.com/your-org/beacon-bob-concert.git
-cd beacon-bob-concert
+git clone https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp.git
+cd VulnerableSampleApp
 ```
 
 ### Step 2: Install Prerequisites
@@ -155,7 +155,7 @@ Follow the [Prerequisites](#prerequisites) section to install required software.
 
 #### Key Outcomes
 
-- ✅ Forked `ecommerce-backend` repository
+- ✅ Forked `VulnerableSampleApp` repository
 - ✅ Java application upgraded from Java 8 to Java 17
 - ✅ All dependencies updated to compatible versions
 - ✅ Deprecated code refactored
@@ -304,14 +304,14 @@ Follow the [Prerequisites](#prerequisites) section to install required software.
 
 ### Sample Repositories
 
-- **Original Application (Vulnerable):**  
-  `https://github.ibm.com/ibm-concert-platinum-demos/ecommerce-backend`
+- **Original Application (Vulnerable):**
+  `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp`
   - Java 8 application
   - 14 SAST exposures
   - Multiple CVEs
 
-- **Upgraded Application (Reference):**  
-  `https://github.ibm.com/Sailendu-Patra/upgraded-java-app`
+- **Upgraded Application (Reference):**
+  `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp`
   - Java 17 application
   - Modernized dependencies
   - Security fixes applied
@@ -374,7 +374,7 @@ Follow the [Prerequisites](#prerequisites) section to install required software.
 1. Delete existing fork from your GitHub account
 2. Or use existing fork and pull latest changes:
    ```bash
-   git remote add upstream https://github.ibm.com/ibm-concert-platinum-demos/ecommerce-backend
+   git remote add upstream https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp.git
    git fetch upstream
    git merge upstream/main
    ```

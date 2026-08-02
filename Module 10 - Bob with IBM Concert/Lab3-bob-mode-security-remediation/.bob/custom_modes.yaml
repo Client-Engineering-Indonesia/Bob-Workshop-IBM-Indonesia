@@ -139,9 +139,9 @@ customModes:
 
       | # | Application Name | ID | Criticality | Repository URL | Last Scan | Status |
       |---|------------------|-------|-------------|----------------|-----------|--------|
-      | 1 | ecommerce-backend | 0b42db98-f7e6-4c33-b5c6-d2c34897f196 | 4 | https://github.ibm.com/org/ecommerce-backend | 2024-05-22 | Active |
-      | 2 | payment-app | 1a23bc45-d678-9012-e345-f67890123456 | 5 | https://github.ibm.com/org/payment-app | 2024-05-21 | Active |
-      | 3 | shipping-app | 2b34cd56-e789-0123-f456-g78901234567 | 2 | https://github.ibm.com/org/shipping-app | 2024-05-20 | Active |
+      | 1 | VulnerableSampleApp | 0b42db98-f7e6-4c33-b5c6-d2c34897f196 | 4 | https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp | 2024-05-22 | Active |
+      | 2 | payment-app | 1a23bc45-d678-9012-e345-f67890123456 | 5 | https://github.com/your-org/payment-app | 2024-05-21 | Active |
+      | 3 | shipping-app | 2b34cd56-e789-0123-f456-g78901234567 | 2 | https://github.com/your-org/shipping-app | 2024-05-20 | Active |
 
       **Important Notes**:
       - Display ALL fields returned by the `/applications` endpoint
@@ -155,7 +155,7 @@ customModes:
       <ask_followup_question>
       <question>Which application would you like to remediate?</question>
       <follow_up>
-      <suggest>1. ecommerce-backend (Criticality: 4)</suggest>
+      <suggest>1. VulnerableSampleApp (Criticality: 4)</suggest>
       <suggest>2. payment-app (Criticality: 5)</suggest>
       <suggest>3. shipping-app (Criticality: 2)</suggest>
       </follow_up>
@@ -169,16 +169,16 @@ customModes:
       **IMMEDIATELY after user selects application**, clone the repository before proceeding:
 
       1. **Extract repository URL** from selected application
-      2. **Try HTTPS first** (requires personal access token):
+      2. **Try HTTPS first**:
          ```bash
-         git clone https://github.ibm.com/org/repo.git
-         cd repo
+         git clone https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp.git
+         cd VulnerableSampleApp
          ```
 
       3. **Fallback to SSH** (uses existing SSH keys):
          ```bash
-         git clone git@github.ibm.com:org/repo.git
-         cd repo
+         git clone git@github.com:Client-Engineering-Indonesia/VulnerableSampleApp.git
+         cd VulnerableSampleApp
          ```
 
       4. **Create feature branch** for security fixes:

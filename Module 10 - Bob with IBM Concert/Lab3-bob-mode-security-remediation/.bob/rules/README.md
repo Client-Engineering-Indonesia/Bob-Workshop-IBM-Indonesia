@@ -140,15 +140,15 @@ Bob:
 
 | # | Application Name         | Criticality | CVEs | Exposures | Repository |
 |---|-------------------------|-------------|------|-----------|------------|
-| 1 | ecommerce-backend-demo  | 3           | 0    | 15        | github.ibm.com/... |
-| 2 | payment-service         | 5           | 3    | 8         | github.ibm.com/... |
+| 1 | VulnerableSampleApp     | 3           | 0    | 15        | github.com/Client-Engineering-Indonesia/... |
+| 2 | payment-service         | 5           | 3    | 8         | github.com/... |
 
 Which application would you like to remediate? (Enter number)
 
 User: "1"
 
 Bob:
-📦 Cloning ecommerce-backend-demo...
+📦 Cloning VulnerableSampleApp...
 ✅ Repository cloned successfully
 
 What would you like to fix?
@@ -175,7 +175,7 @@ Bob:
 📖 Analyzing exposure: rce.java.script-engine-eval
 
 **Vulnerability**: Remote Code Execution via ScriptEngine
-**File**: src/main/java/com/ecommerce/controller/ProductController.java:67
+**File**: VulnerableApp.java:67
 **Root Cause**: User input directly evaluated as JavaScript code
 
 **Current Code**:

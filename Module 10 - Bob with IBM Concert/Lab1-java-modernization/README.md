@@ -6,16 +6,16 @@ This guide walks you through the process of modernizing Java applications using 
 
 ## Reference Repository
 
-For Java Modernization, you will fork and work with the ecommerce-backend application from:
+For Java Modernization, you will fork and work with the VulnerableSampleApp application from:
 ```bash
-https://github.ibm.com/ibm-concert-platinum-demos/ecommerce-backend
+https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp
 ```
 
 **Important:** Each participant will fork this repository to their own GitHub account to ensure everyone has their own copy to work with.
 
 Later, after this lab is finished, you can find a reference example of the upgraded Java application here:
 ```bash
-https://github.ibm.com/Sailendu-Patra/upgraded-java-app
+https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp
 ```
 
 ## Prerequisites
@@ -127,7 +127,7 @@ You should see Maven version information and the Java version Maven is using.
 
 ## Forking the Repository
 
-Before you begin the Java modernization process, you need to create your own copy (fork) of the ecommerce-backend repository.
+Before you begin the Java modernization process, you need to create your own copy (fork) of the VulnerableSampleApp repository.
 
 ### What is a Fork?
 
@@ -143,7 +143,7 @@ A **fork** is your personal copy of a repository that lives in your GitHub accou
 
 Open your web browser and go to:
 ```
-https://github.ibm.com/ibm-concert-platinum-demos/ecommerce-backend
+https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp
 ```
 
 ![Repository homepage](image/01-java-repo.png)
@@ -159,7 +159,7 @@ In the top-right corner of the repository page, click the **Fork** button.
 On the fork creation page, you'll see several options:
 
 1. **Owner**: Select your GitHub account (should be pre-selected)
-2. **Repository name**: Keep it as `ecommerce-backend` or customize if desired
+2. **Repository name**: Keep it as `VulnerableSampleApp` or customize if desired
 3. **Description**: Optional - you can add a description
 4. **Copy the main branch only**: ✅ **Keep this checked**
    - This ensures you only copy the main branch
@@ -187,7 +187,7 @@ Now that you have your own fork, clone it to your local machine **in the Lab1-ja
 ```bash
 cd Lab1-java-modernization
 git clone <your-forked-repository-url>
-cd ecommerce-backend
+cd VulnerableSampleApp
 ```
 
 ![Clone fork](image/05-fork-clone.png)
@@ -195,23 +195,23 @@ cd ecommerce-backend
 **Example:**
 ```bash
 cd Lab1-java-modernization
-git clone https://github.ibm.com/your-username/ecommerce-backend
-cd ecommerce-backend
+git clone https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp.git
+cd VulnerableSampleApp
 ```
 
 **Note:** Cloning into the Lab1-java-modernization directory keeps your workspace organized and ensures all lab materials are in one place.
 
-✅ **You now have your own copy of the ecommerce-backend application ready for Java modernization!**
+✅ **You now have your own copy of the VulnerableSampleApp ready for Java modernization!**
 
 ## Step-by-Step Java Modernization Guide
 
 ### Step 1: Open Your Forked Repository in Bob
 
-After cloning your forked repository, open the `ecommerce-backend` folder in Bob:
+After cloning your forked repository, open the `VulnerableSampleApp` folder in Bob:
 
 1. Launch IBM Bob IDE
 2. Click **File** → **Open Folder**
-3. Navigate to your cloned `ecommerce-backend` directory
+3. Navigate to your cloned `VulnerableSampleApp` directory
 4. Click **Open**
 
 Bob will detect the Java application and automatically enable the Java modernization mode.

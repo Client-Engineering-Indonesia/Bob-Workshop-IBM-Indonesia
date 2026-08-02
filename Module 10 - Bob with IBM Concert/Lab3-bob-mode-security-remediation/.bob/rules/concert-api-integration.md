@@ -82,11 +82,11 @@ curl -s -k -X GET "${CONCERT_BASE_URL}/applications?page_size=100" \
   "applications": [
     {
       "id": "550e8400-e29b-41d4-a716-446655440000",
-      "name": "ecommerce-backend-demo",
+      "name": "VulnerableSampleApp",
       "criticality": 3,
       "cve_count": 0,
       "exposure_count": 15,
-      "repository_url": "https://github.ibm.com/sailendu-patra/ecommerce-backend-demo",
+      "repository_url": "https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp",
       "last_scan": "2024-05-22T10:30:00Z"
     }
   ],
@@ -159,11 +159,11 @@ curl -s -k -X GET "${CONCERT_BASE_URL}/applications/550e8400-e29b-41d4-a716-4466
       "rule_id": "sqli.java.method-param-sql-concat",
       "severity": "error",
       "priority": "Priority 1",
-      "exposure_object_id": "https://github.ibm.com/sailendu-patra/ecommerce-backend-demo",
+      "exposure_object_id": "https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp",
       "solution": "Method parameter concatenated into SQL query string. Use PreparedStatement instead.",
       "occurrence_count": 2,
       "assessment_status": "Open",
-      "file_path": "src/main/java/com/ecommerce/controller/ProductController.java",
+      "file_path": "src/main/java/com/vulnerableapp/VulnerableApp.java",
       "line_number": 45
     }
   ],
@@ -238,7 +238,7 @@ curl -s -k -X GET "${CONCERT_BASE_URL}/vulnerability/exposures/8bf0d5cc-321d-41c
   "cwe": "CWE-89",
   "description": "User input is concatenated directly into SQL query, allowing SQL injection attacks",
   "solution": "Use PreparedStatement with parameterized queries instead of string concatenation",
-  "file_path": "src/main/java/com/ecommerce/controller/ProductController.java",
+  "file_path": "src/main/java/com/vulnerableapp/VulnerableApp.java",
   "line_number": 45,
   "code_snippet": "String query = \"SELECT * FROM products WHERE id=\" + productId;",
   "remediation_example": "PreparedStatement pstmt = conn.prepareStatement(\"SELECT * FROM products WHERE id=?\");\npstmt.setString(1, productId);",
@@ -396,7 +396,7 @@ Expected response:
   "applications": [
     {
       "id": "550e8400-e29b-41d4-a716-446655440000",
-      "name": "ecommerce-backend-demo",
+      "name": "VulnerableSampleApp",
       "criticality": 3,
       "cve_count": 0,
       "exposure_count": 15

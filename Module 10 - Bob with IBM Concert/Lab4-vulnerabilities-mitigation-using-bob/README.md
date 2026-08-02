@@ -5,8 +5,8 @@ A step-by-step walkthrough of how BOB, integrated with IBM Concert, automaticall
 
 ---
 
-For this lab we will use this repo 
-`https://github.ibm.com/ibm-concert-platinum-demos/ecommerce-backend`
+For this lab we will use this repo
+`https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp`
 
 ## Overview
 
@@ -18,7 +18,7 @@ Deploy Rules → Activate Mode → Discover Apps via Concert
       → Push to GitHub → Verify in Concert (Reduced Exposure Count)
 ```
 
-**Starting state:** `ecommerce-backend` has **14 SAST exposures** detected in IBM Concert.  
+**Starting state:** `VulnerableSampleApp` has **14 SAST exposures** detected in IBM Concert.
 **End state:** After BOB's automated remediation, Concert shows only **1 remaining SAST exposure**.
 
 ---
@@ -27,64 +27,48 @@ Deploy Rules → Activate Mode → Discover Apps via Concert
 
 | Asset | Path | Description |
 |-------|------|-------------|
-| Security Remediation Rules | `beacon-bob-concert/bob-security-remediation-mode/rules/rules-security-remediation/` | BOB mode rules and Concert API integration guides |
-| BOB Mode Config | `beacon-bob-concert/bob-security-remediation-mode/custom_modes.yaml` | Custom mode definitions for BOB |
-| Original Application (14 SAST) | `ecommerce-backend/` | Vulnerable e-commerce Java app (pre-fix) |
-| Fixed Application | `upgraded-java-app/` | Remediated version with SAST exposures resolved |
-
-> **Note:** If your code lives at a different path, replace `ecommerce-backend/` and `upgraded-java-app/` with your actual directories throughout this guide. These are referenced as placeholders.
+| Security Remediation Rules | `VulnerableSampleApp/.bob/rules/rules-security-remediation/` | BOB mode rules and Concert API integration guides |
+| BOB Mode Config | `VulnerableSampleApp/.bob/custom_modes.yaml` | Custom mode definitions for BOB |
+| Original Application (14 SAST) | `VulnerableSampleApp/` | Vulnerable Java app (pre-fix) |
+| GitHub Repository | `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp` | Public repo untuk di-fork peserta |
 
 ---
 
 ## Prerequisites
 
-Before starting the demo, ensure you have:
+> ✅ Jika kamu sudah selesai Lab 3, semua prerequisites ini sudah terpenuhi.
 
-- [ ] IBM BOB installed and accessible in your IDE (VS Code / JetBrains)
-- [ ] IBM Concert instance running and accessible (note your Concert URL and API key)
-- [ ] The `ecommerce-backend` application already registered and scanned in IBM Concert (showing 14 SAST exposures)
-- [ ] Git access (HTTPS token or SSH key) to the target repository
-- [ ] `jq` installed on your machine (`brew install jq` / `apt install jq`)
+- [ ] IBM Bob terinstall di VS Code dan sudah login
+- [ ] Folder `.bob` sudah ada di root `VulnerableSampleApp/` (dari Lab 3 Step 2)
+- [ ] File `.env` sudah berisi Concert credentials (dari Lab 3 Step 3)
+- [ ] Mode **🔒 Security Remediation** sudah muncul di Bob (dari Lab 3 Step 4)
+- [ ] `VulnerableSampleApp` sudah terdaftar dan ter-scan di IBM Concert
+- [ ] `jq` terinstall: `brew install jq` (Mac) / `apt install jq` (Linux)
 
 ---
 
-## Step 1 — Deploy Security Remediation Rules to BOB
+## Step 1 — Pastikan Security Remediation Mode Sudah Aktif
 
-The Security Remediation mode is defined by a set of rule files and a custom mode YAML. These must be available to BOB before the mode can be activated.
-
-### 1.1 Locate the Rules Directory
-
-The rules live at:
+Setelah menyelesaikan Lab 3, Bob sudah memiliki `.bob` directory dengan struktur berikut di workspace `VulnerableSampleApp`:
 
 ```
-beacon-bob-concert/bob-security-remediation-mode/
-├── custom_modes.yaml                         ← Mode definition (slug, role, workflow)
-└── rules/
-    └── rules-security-remediation/
-        ├── README.md                         ← Mode overview & quick start
-        ├── concert-api-integration.md        ← Concert REST API reference
-        └── remediation-strategies.md         ← Fix patterns for 10 vulnerability types
+VulnerableSampleApp/
+├── .bob/
+│   ├── custom_modes.yaml              ← Mode definition
+│   └── rules/
+│       └── rules-security-remediation/
+│           ├── README.md              ← Mode overview
+│           ├── concert-api-integration.md   ← Concert API reference
+│           └── remediation-strategies.md    ← Fix patterns
+├── .env                               ← Concert credentials (dari Lab 3)
+├── VulnerableApp.java
+└── pom.xml
 ```
 
-### 1.2 Register the Custom Mode in BOB
-
-Copy or reference the `custom_modes.yaml` into your BOB global configuration. The file defines the following mode:
-
-- `security-remediation` — for Concert-integrated vulnerability fixing
+Buka Bob dan verifikasi mode **🔒 Security Remediation** muncul:
 
 ![BOB Settings - Custom Modes Loaded](image/01-bob-settings-custom-modes.png)
-> *📸 BOB settings panel showing custom_modes.yaml loaded, with "Security Remediation" mode visible in the modes list*
-
-### 1.3 Place Rules in the Workspace
-
-Ensure the rules directory is accessible to BOB in your working workspace. BOB will reference these files during the remediation workflow:
-
-```bash
-# Example: copy rules to your project's .bob directory
-cp -r beacon-bob-concert/bob-security-remediation-mode/rules .bob/rules
-```
-
-> **Note:** The `.env` file containing your Concert credentials should be placed in the root of the workspace you are remediating. BOB will create it interactively on first use if it is not present.
+> *📸 BOB settings panel showing custom_modes.yaml loaded, dengan "Security Remediation" mode terlihat di list*
 
 ---
 
@@ -301,7 +285,7 @@ In Concert, trigger a new data discovery / scan by clicking **"Discover your dat
 
 In the discovery configuration, point Concert to the updated GitHub repository:
 
-- **Repository URL:** `https://github.com/<org>/ecommerce-backend`
+- **Repository URL:** `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp`
 - **Branch:** `main` (or the merged branch)
 - **Scan type:** SAST
 
@@ -317,17 +301,17 @@ Concert will pull the latest code and run a fresh SAST scan. This typically take
 
 ### 7.5 Review the New Results
 
-Once the scan completes, navigate to the `ecommerce-app-bob-upgraded` application in Concert.
+Once the scan completes, navigate to the `VulnerableSampleApp` application in Concert.
 
 **Before (14 SAST Exposures):**
 
 ![Concert Before 14 SAST](image/17-concert-before-14-sast.png)
-> *📸 IBM Concert showing the ecommerce application with 14 SAST exposures — captured before the demo*
+> *📸 IBM Concert showing VulnerableSampleApp with 14 SAST exposures — captured before the demo*
 
 **After (1 SAST Exposure remaining):**
 
 ![Concert After 1 SAST](image/18-concert-after-1-sast.png)
-> *📸 IBM Concert showing the ecommerce application with only 1 SAST exposure remaining after BOB's automated remediation*
+> *📸 IBM Concert showing VulnerableSampleApp with only 1 SAST exposure remaining after BOB's automated remediation*
 
 The exposure count dropped from **14 → 1**, confirming that BOB's automated security remediation successfully resolved 13 of 14 SAST findings.
 
@@ -350,45 +334,35 @@ The exposure count dropped from **14 → 1**, confirming that BOB's automated se
 ### A. Folder Structure Reference
 
 ```
-Bob-Artemis/
-├── DEMO-GUIDE.md
-├── image/                                          ← All screenshot images go here
-│   ├── 01-bob-settings-custom-modes.png
-│   ├── 02-bob-security-remediation-mode-detail.png
-│   ├── 03-bob-security-remediation-mode-selected.png
-│   ├── 04-bob-env-setup-conversation.png
-│   ├── 05-bob-concert-connection-success.png
-│   ├── 06-bob-concert-applications-table.png
-│   ├── 07-bob-scope-selection-cve-vs-sast.png
-│   ├── 08-bob-sast-exposures-list-14.png
-│   ├── 09-bob-remediation-task-plan.png
-│   ├── 10-bob-fixes-applied-progress.png
-│   ├── 11-bob-tests-passing.png
-│   ├── 12-bob-git-push.png
-│   ├── 13-concert-dashboard.png
-│   ├── 14-concert-discover-data-button.png
-│   ├── 15-concert-repo-config.png
-│   ├── 16-concert-scan-in-progress.png
-│   ├── 17-concert-before-14-sast.png
-│   └── 18-concert-after-1-sast.png
-│
-├── beacon-bob-concert/
-│   └── bob-security-remediation-mode/
-│       ├── custom_modes.yaml
-│       └── rules/
-│           └── rules-security-remediation/
-│               ├── README.md
-│               ├── concert-api-integration.md
-│               └── remediation-strategies.md
-│
-├── ecommerce-backend/                               ← Original code (14 SAST issues)
-│   ├── VulnerableApp.java
-│   └── pom.xml
-│
-└── upgraded-java-app/                               ← Remediated code (1 SAST remaining)
-    ├── src/
-    ├── pom.xml
-    └── Dockerfile
+VulnerableSampleApp/
+├── .bob/                                           ← Bob mode config & rules
+│   ├── custom_modes.yaml
+│   └── rules/
+│       └── rules-security-remediation/
+│           ├── README.md
+│           ├── concert-api-integration.md
+│           └── remediation-strategies.md
+├── Lab4-vulnerabilities-mitigation-using-bob/
+│   └── image/                                      ← All screenshot images
+│       ├── 01-bob-settings-custom-modes.png
+│       ├── 02-bob-security-remediation-mode-detail.png
+│       ├── 03-bob-security-remediation-mode-selected.png
+│       ├── 05-bob-concert-connection-success.png
+│       ├── 06-bob-concert-applications-table.png
+│       ├── 07-bob-scope-selection-cve-vs-sast.png
+│       ├── 08-bob-sast-exposures-list-14.png
+│       ├── 09-bob-remediation-task-plan.png
+│       ├── 10-bob-fixes-applied-progress.png
+│       ├── 11-bob-tests-passing.png
+│       ├── 12-bob-git-push.png
+│       ├── 13-concert-dashboard.png
+│       ├── 14-concert-discover-data-button.png
+│       ├── 15-concert-repo-config.png
+│       ├── 16-concert-scan-in-progress.png
+│       ├── 17-concert-before-14-sast.png
+│       └── 18-concert-after-1-sast.png
+├── VulnerableApp.java                              ← Original code (14 SAST issues)
+└── pom.xml
 ```
 
 ### B. BOB Workflow Phases Reference
@@ -414,14 +388,10 @@ Bob-Artemis/
 | Fetch CVEs | `GET /vulnerability/cves?show_associations=true&filter=application_id:{id}` |
 | Update exposure status | `PATCH /vulnerability/exposures/{id}` |
 
-### D. Adapting This Guide to Different Repositories
+### D. Repository Reference
 
-If the application code is at a different path than shown above, update these placeholders:
-
-| Placeholder | Replace With |
-|-------------|-------------|
-| `ecommerce-backend/` | Path to your original (vulnerable) application |
-| `upgraded-java-app/` | Path to your remediated application |
-| `ecommerce-app-bob-upgraded` | Your Concert application name |
-| `https://github.com/<org>/ecommerce-backend` | Your actual GitHub repository URL |
-| `https://<your-concert-host>:12443` | Your Concert instance URL |
+| Item | Value |
+|------|-------|
+| Vulnerable application | `https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp` |
+| Concert application name | `VulnerableSampleApp` |
+| Concert instance URL | Diberikan oleh presenter (lihat Lab 3) |

@@ -1,215 +1,164 @@
-# Bob mode to connect with concert 
+# Lab 3 — Bob Mode: Connect with IBM Concert
 
-This guide walks you through the process of integrate BOB with IBM Concert.
+This guide walks you through setting up Bob's **Security Remediation** mode and connecting it to IBM Concert.
+
+---
+
+## 🔑 Workshop Credentials
+
+> **Peserta Workshop:** 3 nilai di bawah akan dibagikan oleh presenter saat sesi ini dimulai. **Jangan di-commit ke GitHub!**
+
+| Variable | Deskripsi |
+|----------|-----------|
+| `CONCERT_BASE_URL` | URL Concert instance + `/concert/core/api/v1` |
+| `CONCERT_API_KEY` | API key dalam format base64 |
+| `CONCERT_INSTANCE_ID` | Instance ID Concert (biasanya `0000-0000-0000-0000`) |
+
+---
 
 ## Overview
 
-This custom Bob mode enables automated security vulnerability remediation by:
-- Connecting to IBM Concert for vulnerability data
-- Analyzing CVEs (dependency vulnerabilities) and SAST exposures (code-level issues)
-- Proposing and applying secure fixes
-- Running tests to validate fixes
-- Committing changes with proper Git workflow
-- Updating Concert status after remediation
+Bob's Security Remediation mode memungkinkan kamu untuk:
+- Terhubung ke IBM Concert dan mengambil data vulnerability
+- Menganalisis CVE (dependency) dan SAST exposures (code-level)
+- Mengusulkan dan mengaplikasikan security fixes
+- Menjalankan tests untuk validasi fixes
+- Mengupdate status vulnerability di Concert setelah remediation
+
+---
 
 ## Step-by-Step Guide
 
-### Step 1: Check Bob Mode
+### Step 1: Clone Repository
 
-We already put the Bob mode to connect with concert in the repository, take a look in the .bob directory and the custom_modes.yaml file.
-
-``` bash
-beacon-bob-concert/
-├── Lab1-java-modernization 
-├── Lab2-java-modernization
-├── Lab3-bob-mode-security-remediation
-   ├── .bob #######>>>> here
-      ├── rules 
-      │   ├── rules-security-remediation
-      │   │   ├── README.md
-      │   │   ├── concert-api-integration.md
-      │   │   └── remediation-strategies.md
-      ├── custom_modes.yaml
-      ├── .env.example
-├── README.md
-└── Lab4-vulnerabilities-mitigation-using-bob
-└── .gitignore
-└── LICENSE
-└── README.md
-
-```
-### Step 3: Copy the .bob directory
-Assuming you're in the `beacon-bob-concert` directory, run:
+Clone repository `VulnerableSampleApp` ke local machine kamu:
 
 ```bash
-cp -r Lab3-bob-mode-security-remediation/.bob ./
+git clone https://github.com/Client-Engineering-Indonesia/VulnerableSampleApp.git
+cd VulnerableSampleApp
 ```
 
-In order to use the Bob mode, you need to copy the .bob directory to your workspace
+---
 
-``` bash
-beacon-bob-concert/
-├── .bob #######>>>> directory copied
-├── Lab1-java-modernization 
-├── Lab2-java-modernization
-├── Lab3-bob-mode-security-remediation
-   ├── .bob
-      ├── rules 
-      │   ├── rules-security-remediation
-      │   │   ├── README.md
-      │   │   ├── concert-api-integration.md
-      │   │   └── remediation-strategies.md
-      ├── custom_modes.yaml
-      ├── .env.example
-├── README.md
-└── Lab4-vulnerabilities-mitigation-using-bob
-└── .gitignore
-└── LICENSE
-└── README.md
-```
+### Step 2: Copy `.bob` Directory ke Workspace
 
-![Copy Bob](image/1-copy-bob.png)
-
-
-### Step 2: Configure Concert Credentials
-
-**Option 1: Interactive Setup (Recommended)**
-
-Bob will guide you through credential setup on first use:
-1. Activate Security Remediation mode
-2. Type: "Check Concert for vulnerabilities"
-3. Bob will detect no `.env` file and ask for:
-   - Concert Base URL
-   - API Key
-   - Instance ID
-4. Bob creates `.env` file automatically
-
-**Option 2: Manual Setup**
-
-Create a `.env` file in your workspace:
+Bob membaca custom modes dari folder `.bob` di root workspace yang sedang kamu buka. Copy folder `.bob` dari repo workshop ini ke dalam folder `VulnerableSampleApp`:
 
 ```bash
-# Copy template
-cp .env.example .env
-
-# Edit with your credentials
+# Dari dalam folder VulnerableSampleApp
+cp -r ../Bob-Workshop-IBM-Indonesia/"Module 10 - Bob with IBM Concert"/Lab3-bob-mode-security-remediation/.bob ./
 ```
 
-Add your Concert API credentials:
+Atau kalau kamu clone workshop repo secara terpisah:
 
 ```bash
-# Concert API Configuration
-CONCERT_BASE_URL=https://your-concert-instance.ibm.com/concert/core/api/v1
-CONCERT_API_KEY=base64_encoded_username_colon_apikey
+cp -r <path-to-workshop>/Lab3-bob-mode-security-remediation/.bob ./
+```
+
+Setelah dicopy, struktur folder kamu akan terlihat seperti ini:
+
+```
+VulnerableSampleApp/
+├── .bob/                        ← ✅ baru dicopy
+│   ├── custom_modes.yaml
+│   └── rules/
+│       └── rules-security-remediation/
+│           ├── README.md
+│           ├── concert-api-integration.md
+│           └── remediation-strategies.md
+├── VulnerableApp.java
+└── pom.xml
+```
+
+![Copy .bob directory](image/1-copy-bob.png)
+
+---
+
+### Step 3: Buat File `.env` dengan Credentials
+
+Paste command berikut di terminal, **ganti 3 nilai** dengan credentials dari presenter:
+
+```bash
+cat > .env << EOF
+CONCERT_BASE_URL=<ISI_DARI_PRESENTER>
+CONCERT_API_KEY=<ISI_DARI_PRESENTER>
+CONCERT_INSTANCE_ID=<ISI_DARI_PRESENTER>
+EOF
+```
+
+Contoh hasil `.env` yang sudah terisi:
+
+```bash
+CONCERT_BASE_URL=https://your-concert-host:12443/concert/core/api/v1
+CONCERT_API_KEY=Y29uY2VydHVzZXI6...
 CONCERT_INSTANCE_ID=0000-0000-0000-0000
 ```
 
-**How to get your credentials:**
+> ⚠️ File `.env` sudah ada di `.gitignore` — aman, tidak akan ke-push ke GitHub.
 
-1. **API Key**: 
-   - Log into IBM Concert
-   - Go to Settings → API Keys
-   - Generate new key
-   - Format: Base64-encoded `username:api_key`
-   - Example: `concertuser:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` → `<base64-encoded-value>`
+---
 
-2. **Instance ID**: 
-   - Provided by your Concert administrator
-   - Typically `0000-0000-0000-0000`
+### Step 4: Reload Bob & Verifikasi Mode
 
-3. **Base URL**: 
-   - Your Concert instance URL + `/concert/core/api/v1`
-   - Example: `https://<your-concert-host>:12443/concert/core/api/v1`
+Reload VS Code agar Bob membaca `custom_modes.yaml` yang baru dicopy:
 
+- **Mac:** `Cmd+Shift+P` → ketik `Reload Window` → Enter
+- **Windows/Linux:** `Ctrl+Shift+P` → ketik `Reload Window` → Enter
 
-### Step 3: Reload Bob
+Setelah reload, buka Bob dan klik mode selector. Pastikan **🔒 Security Remediation** muncul di list:
 
-Restart VS Code or reload the Bob extension:
-- Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
-- Type "Reload Window"
-- Press Enter
+![Bob Security Remediation mode muncul](image/2-modes.png)
 
-### Step 4: Verify Mode is Loaded
+---
 
-1. Open Bob
-2. Click the mode selector
-3. Look for "🔒 Security Remediation" in the custom modes list
+### Step 5: Test Koneksi ke Concert
 
-![Copy Bob](image/2-modes.png)
+Pilih mode **🔒 Security Remediation**, lalu ketik di Bob:
 
-### Step 5: Testing Security Remediation Modes
-
-Type: 
-
-```bash
+```
 Check Concert for vulnerabilities
 ```
-![Testing Bob](image/3-testing-bob.png)
 
+![Ketik Check Concert for vulnerabilities](image/3-testing-bob.png)
 
-**Bob will detect no .env file and guide you through setup**:
-   - Bob: "No .env file found. Let me help you set up Concert credentials."
-   - Bob: "What is your Concert Base URL?"
-   - You: Enter your Concert URL (e.g., `https://<your-concert-host>:12443/concert/core/api/v1`)
+Bob akan otomatis:
+1. Membaca credentials dari `.env`
+2. Test koneksi ke Concert API (`/kpis` endpoint)
+3. Menampilkan semua aplikasi yang terdaftar di Concert
 
-   ![Testing Bob](image/3.1-testing-bob.png)
+**Alur yang akan kamu lihat:**
 
-   - Bob: "What is your Concert API Key?"
-   - You: Enter your base64-encoded API key
-   - Bob: "What is your Concert Instance ID?"
-   - You: Enter your instance ID (typically `0000-0000-0000-0000`)
+Bob melakukan health check ke Concert:
 
-   ![Testing Bob](image/3.2-testing-bob.png)
+![Bob test Concert API connection](image/3.1-testing-bob.png)
 
-   - Bob: "✅ Created .env file with your credentials"
+Bob meminta approval untuk menjalankan curl command — klik **Approve**:
 
-   ![Testing Bob](image/3.3-testing-bob.png)
+![Bob meminta approval](image/3.2-testing-bob.png)
 
-``` bash
-beacon-bob-concert/
-├── .bob 
-├── Lab1-java-modernization 
-├── Lab2-java-modernization
-├── Lab3-bob-mode-security-remediation
-   ├── .bob
-      ├── rules 
-      │   ├── rules-security-remediation
-      │   │   ├── README.md
-      │   │   ├── concert-api-integration.md
-      │   │   └── remediation-strategies.md
-      ├── custom_modes.yaml
-      ├── .env.example
-├── README.md
-└── Lab4-vulnerabilities-mitigation-using-bob
-└── .env #######>>>> here
-└── .gitignore
-└── LICENSE
-└── README.md
-```
+Bob mengkonfirmasi `.env` berhasil dibaca:
 
-   - Bob: "Testing Concert API connection..."
-   - You: Click "Approve" when Bob asks to run the health check
-   - Bob: "Connected successfully!"
+![Bob konfirmasi .env terbaca](image/3.3-testing-bob.png)
 
-   ![Testing Bob](image/3.4-testing-bob.png)
+Koneksi berhasil — Concert API connected:
 
-   Now Bob already connected to the concert instances, you may see your application in the list of applications.
+![Concert API connection success](image/3.4-testing-bob.png)
 
-   ![Testing Bob](image/3.5-testing-bob.png)
+Bob menampilkan daftar aplikasi di Concert — kamu bisa melihat `VulnerableSampleApp`:
 
+![Daftar aplikasi di Concert](image/3.5-testing-bob.png)
 
-## Conclusion
+---
 
-Congratulations! You have successfully configure BOB modes and connected to the concert instances.
+## ✅ Checklist Sebelum Lanjut ke Lab 4
+
+- [ ] Folder `.bob` sudah ada di root `VulnerableSampleApp/`
+- [ ] File `.env` sudah ada dengan 3 credentials terisi
+- [ ] Mode **🔒 Security Remediation** muncul di Bob
+- [ ] Bob berhasil connect ke Concert dan menampilkan daftar aplikasi
+
+---
 
 ## Next Steps
-- Using Bob modes to remediate vulnerabilities in your application.
 
-## BOB Security Remediation Features
-
-✅ **Automated Vulnerability Discovery** - Fetches all applications and their security issues from Concert
-✅ **Smart Remediation** - Uses proven fix patterns for 10+ vulnerability types
-✅ **Git Flow Integration** - Creates feature branches, commits fixes, and pushes changes
-✅ **Test Validation** - Runs tests after each fix to ensure no regressions
-✅ **Concert Integration** - Updates vulnerability status in Concert after remediation
-✅ **Interactive Workflow** - User approval required at each step
+Lanjut ke **[Lab 4 → Automated Vulnerability Remediation](../Lab4-vulnerabilities-mitigation-using-bob/README.md)**

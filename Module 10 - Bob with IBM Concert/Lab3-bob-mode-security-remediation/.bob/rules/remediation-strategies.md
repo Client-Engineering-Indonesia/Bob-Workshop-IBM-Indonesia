@@ -431,7 +431,7 @@ try {
 5. **Audit Logging**: Log all script execution attempts
 6. **Least Privilege**: Run with minimal permissions
 
-### Real-World Example (ecommerce-backend-demo)
+### Real-World Example (VulnerableSampleApp)
 
 **Vulnerable Code:**
 ```java
