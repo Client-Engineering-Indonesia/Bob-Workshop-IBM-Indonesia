@@ -316,9 +316,9 @@ Example error handling:
 
 ```bash
 # Add -w "\n%{http_code}" to get status code
-response=$(curl -s -w "\n%{http_code}" -X GET "${CONCERT_BASE_URL}/api/v1/vulnerabilities" \
-  -H "Authorization: Bearer ${CONCERT_API_KEY}" \
-  -H "X-Tenant-ID: ${CONCERT_TENANT_ID}")
+response=$(curl -s -k -w "\n%{http_code}" -X GET "${CONCERT_BASE_URL}/applications?page_size=1" \
+  -H "Authorization: C_API_KEY ${CONCERT_API_KEY}" \
+  -H "InstanceId: ${CONCERT_INSTANCE_ID}")
 
 # Extract status code (last line)
 status_code=$(echo "$response" | tail -n1)
@@ -431,7 +431,7 @@ response=$(curl -s -k -X GET "${CONCERT_BASE_URL}/applications?page_size=100" \
   -H "InstanceId: ${CONCERT_INSTANCE_ID}")
 
 # Parse and display
-echo "$response" | jq -r '.applications[] | "[\(.criticality)] \(.name) - CVEs: \(.cve_count), Exposures: \(.exposure_count)"'
+echo "$response" | jq -r '.applications[] | "[\(.criticality)] \(.name) - v\(.version) (updated: \(.last_updated_on))"'
 
 # Get first application ID
 app_id=$(echo "$response" | jq -r '.applications[0].id')
@@ -442,7 +442,7 @@ exposures=$(curl -s -k -X GET "${CONCERT_BASE_URL}/applications/${app_id}/exposu
   -H "InstanceId: ${CONCERT_INSTANCE_ID}")
 
 # Show Priority 1 exposures
-echo "$exposures" | jq -r '.exposures[] | select(.priority == "Priority 1") | "[\(.severity)] \(.rule_id) - \(.file_path):\(.line_number)"'
+echo "$exposures" | jq -r '.exposures[] | select(.priority == "Priority 1") | "[\(.severity)] \(.rule_id)"'
 ```
 
 This workflow demonstrates proper error handling, JSON parsing, and API interaction patterns with the correct Concert authentication.

@@ -66,7 +66,7 @@ CONCERT_INSTANCE_ID=0000-0000-0000-0000
 Buka chat Bob, lalu ketik perintah berikut:
 
 ```
-Add this file as a new mode: .bob/custom_modes.yaml
+Add this file as a new mode: IBM-Bob-Workshop/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml
 ```
 
 Bob akan langsung mendaftarkan mode **🔒 Security Remediation** tanpa perlu masuk ke Settings.

@@ -6,7 +6,7 @@ customModes:
     groups:
       - read
       - edit
-      - command
+      - execute
       - mcp
     description: Modernize Java applications
     customInstructions: Focus on analyzing Java projects, identifying compatibility issues when upgrading between Java versions, and applying both automated and manual fixes. Use specialized tools to scan projects and implement solutions.
@@ -381,4 +381,4 @@ customModes:
     groups:
       - read
       - edit
-      - command
+      - execute
