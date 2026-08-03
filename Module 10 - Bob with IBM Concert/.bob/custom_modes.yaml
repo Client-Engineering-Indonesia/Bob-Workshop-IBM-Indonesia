@@ -144,9 +144,18 @@ customModes:
 
       **Extract application ID and repository URL** from user's selection for Phase 3.
 
-      ### PHASE 3: Clone Repository
+      ### PHASE 3: Clone Repository (Optional)
 
-      **IMMEDIATELY after user selects application**, clone the repository before proceeding:
+      **After user selects application**, ask the user first:
+
+      ```
+      Would you like to clone the repository locally to inspect and fix the code?
+      (Yes = clone and proceed with code fixes, No = skip and continue to vulnerability discovery only)
+      ```
+
+      **If user says NO** → skip Phase 3, proceed directly to Phase 4.
+
+      **If user says YES**:
 
       1. **Extract repository URL** from selected application
       2. **Try HTTPS first**:
@@ -155,7 +164,7 @@ customModes:
          cd VulnerableSampleApp
          ```
 
-      3. **Fallback to SSH** (uses existing SSH keys):
+      3. **Fallback to SSH** if HTTPS fails (uses existing SSH keys):
          ```bash
          git clone git@github.com:Client-Engineering-Indonesia/VulnerableSampleApp.git
          cd VulnerableSampleApp
