@@ -31,7 +31,15 @@ Buka VS Code, lalu:
 
 ### Langkah 2: Buat File `.env` dengan Kredensial
 
-Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `), lalu jalankan perintah berikut. **Ganti ketiga nilai** dengan kredensial dari presenter:
+Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `), lalu masuk ke folder Module 10 terlebih dahulu:
+
+```bash
+cd "/Users/muhammadfadlyhidayat/Documents/ibm/IBM 2026/BOB in Action/Mantap-Bob-Workshop/Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert"
+```
+
+> **Catatan:** Sesuaikan path di atas dengan lokasi folder di komputer masing-masing jika berbeda.
+
+Kemudian jalankan perintah berikut. **Ganti ketiga nilai** dengan kredensial dari presenter:
 
 ```bash
 cat > .env << EOF
@@ -52,17 +60,24 @@ CONCERT_INSTANCE_ID=0000-0000-0000-0000
 
 ---
 
-### Langkah 3: Import Custom Mode ke Bob
+### Langkah 3: Tambahkan Custom Mode ke Bob
 
-Bob membaca `custom_modes.yaml` dari folder `.bob` di workspace yang sedang dibuka. Lakukan langkah berikut agar mode terdaftar:
+Tambahkan mode **🔒 Security Remediation** ke Bob dengan cara berikut:
 
 1. Klik ikon **Settings** (⚙️) di panel Bob
 2. Pilih tab **Modes**
-3. Klik **Edit Project Modes**
+3. Klik tombol **+ Add Mode** (atau **Edit Project Modes** jika tersedia)
+4. Saat Bob meminta path file, masukkan path berikut:
 
-Bob akan membuka file `.bob/custom_modes.yaml` yang sudah tersedia di folder ini. Mode **🔒 Security Remediation** akan otomatis terdaftar.
+```
+/Users/muhammadfadlyhidayat/Documents/ibm/IBM 2026/BOB in Action/Mantap-Bob-Workshop/Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml
+```
 
-Alternatif — reload VS Code agar Bob membaca ulang konfigurasi:
+> **Catatan:** Sesuaikan path di atas dengan lokasi folder di komputer masing-masing jika berbeda.
+
+Mode **🔒 Security Remediation** akan terdaftar dan siap digunakan.
+
+Apabila mode belum muncul, lakukan reload VS Code:
 
 - **Mac:** `Cmd+Shift+P` → ketik `Reload Window` → Enter
 - **Windows/Linux:** `Ctrl+Shift+P` → ketik `Reload Window` → Enter
