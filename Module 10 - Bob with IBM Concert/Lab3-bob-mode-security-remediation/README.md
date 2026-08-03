@@ -62,25 +62,15 @@ CONCERT_INSTANCE_ID=0000-0000-0000-0000
 
 ### Langkah 3: Tambahkan Custom Mode ke Bob
 
-Tambahkan mode **🔒 Security Remediation** ke Bob dengan cara berikut:
-
-1. Klik ikon **Settings** (⚙️) di panel Bob
-2. Pilih tab **Modes**
-3. Klik tombol **+ Add Mode** (atau **Edit Project Modes** jika tersedia)
-4. Saat Bob meminta path file, masukkan path berikut:
+Buka chat Bob, lalu ketik perintah berikut:
 
 ```
-/Users/muhammadfadlyhidayat/Documents/ibm/IBM 2026/BOB in Action/Mantap-Bob-Workshop/Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml
+Add this file as a new mode: /Users/muhammadfadlyhidayat/Documents/ibm/IBM 2026/BOB in Action/Mantap-Bob-Workshop/Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml
 ```
 
 > **Catatan:** Sesuaikan path di atas dengan lokasi folder di komputer masing-masing jika berbeda.
 
-Mode **🔒 Security Remediation** akan terdaftar dan siap digunakan.
-
-Apabila mode belum muncul, lakukan reload VS Code:
-
-- **Mac:** `Cmd+Shift+P` → ketik `Reload Window` → Enter
-- **Windows/Linux:** `Ctrl+Shift+P` → ketik `Reload Window` → Enter
+Bob akan langsung mendaftarkan mode **🔒 Security Remediation** tanpa perlu masuk ke Settings.
 
 ---
 
