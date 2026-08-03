@@ -31,13 +31,14 @@ Buka VS Code, lalu:
 
 ### Langkah 2: Buat File `.env` dengan Kredensial
 
-Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `), lalu masuk ke folder Module 10 terlebih dahulu:
+Buka terminal di VS Code (`Ctrl+`` ` atau `Cmd+`` `). Pastikan terminal sudah berada di folder `Module 10 - Bob with IBM Concert` — VS Code biasanya otomatis membuka terminal di root workspace yang sedang dibuka.
+
+Verifikasi dengan perintah berikut:
 
 ```bash
-cd "/Users/muhammadfadlyhidayat/Documents/ibm/IBM 2026/BOB in Action/Mantap-Bob-Workshop/Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert"
+pwd
+# Output yang diharapkan: .../Module 10 - Bob with IBM Concert
 ```
-
-> **Catatan:** Sesuaikan path di atas dengan lokasi folder di komputer masing-masing jika berbeda.
 
 Kemudian jalankan perintah berikut. **Ganti ketiga nilai** dengan kredensial dari presenter:
 
@@ -65,10 +66,8 @@ CONCERT_INSTANCE_ID=0000-0000-0000-0000
 Buka chat Bob, lalu ketik perintah berikut:
 
 ```
-Add this file as a new mode: /Users/muhammadfadlyhidayat/Documents/ibm/IBM 2026/BOB in Action/Mantap-Bob-Workshop/Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml
+Add this file as a new mode: .bob/custom_modes.yaml
 ```
-
-> **Catatan:** Sesuaikan path di atas dengan lokasi folder di komputer masing-masing jika berbeda.
 
 Bob akan langsung mendaftarkan mode **🔒 Security Remediation** tanpa perlu masuk ke Settings.
 
