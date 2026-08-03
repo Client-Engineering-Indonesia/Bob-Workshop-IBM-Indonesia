@@ -96,8 +96,6 @@ Klik **Approve** saat Bob meminta izin untuk menjalankan perintah curl:
 
 ![Bob meminta approval](image/3.2-testing-bob.png)
 
-![Bob konfirmasi .env terbaca](image/3.3-testing-bob.png)
-
 Koneksi berhasil:
 
 ![Concert API connection success](image/3.4-testing-bob.png)
