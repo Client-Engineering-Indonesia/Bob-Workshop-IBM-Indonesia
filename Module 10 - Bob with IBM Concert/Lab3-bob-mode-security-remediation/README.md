@@ -61,18 +61,14 @@ CONCERT_INSTANCE_ID=0000-0000-0000-0000
 
 ---
 
-### Langkah 3: Tambahkan Custom Mode ke Bob
+### Langkah 3: Verifikasi Mode Tersedia
 
-Pastikan terlebih dahulu bahwa mode tidak ada di mode list, kalau sudah ada command tersebut tidak perlu dijalankan.
+> **Catatan:** Mode **🔒 Security Remediation** akan otomatis terbaca oleh Bob selama folder `Module 10 - Bob with IBM Concert` dibuka sebagai workspace di VS Code (Langkah 1). Tidak diperlukan instalasi manual.
 
-```
-Add this file as a new mode: IBM-Bob-Workshop/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml
-```
-```
-cp "./Bob-Workshop-IBM-Indonesia/Module 10 - Bob with IBM Concert/.bob/custom_modes.yaml" ~/.bob/custom_modes.yaml
-```
+Apabila mode belum muncul setelah membuka folder, lakukan reload VS Code:
 
-Bob akan langsung mendaftarkan mode **🔒 Security Remediation** tanpa perlu masuk ke Settings.
+- **Mac:** `Cmd+Shift+P` → ketik `Reload Window` → Enter
+- **Windows/Linux:** `Ctrl+Shift+P` → ketik `Reload Window` → Enter
 
 ---
 
