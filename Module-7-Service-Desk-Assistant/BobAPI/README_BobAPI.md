@@ -5,7 +5,7 @@ A working reference implementation that shows two things:
 1. How to call the IBM Bob API from any web application
 2. How Bob can call an external system's API and surface the result as a real-time dashboard
 
-This folder is self-contained. You can embed the chat interface in any existing website, internal portal, or product by reusing the proxy pattern shown here.
+This folder is self-contained. You can embed IBM Bob's API or the chat interface in any existing website, internal portal, or product by reusing the proxy pattern shown here.
 
 ---
 
