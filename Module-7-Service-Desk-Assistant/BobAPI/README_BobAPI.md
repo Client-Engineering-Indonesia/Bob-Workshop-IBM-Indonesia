@@ -1,4 +1,4 @@
-# Service Desk UI
+# Service Desk UI using Bob's API
 
 A working reference implementation that shows two things:
 
